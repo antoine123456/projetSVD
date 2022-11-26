@@ -42,7 +42,7 @@ double NormeInf(double *v, int n);
 void LinearCombination(double *v, double *u, int n, int s);
 
 // B <- A * A^T
-float *get_AAt(float *A, int m, int n);
+double *get_AAt(double *A, int m, int n);
 
 // B <- A^T * A
-float *get_AtA(float *A, int m, int n);
+double *get_AtA(double *A, int m, int n);

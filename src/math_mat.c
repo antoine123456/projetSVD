@@ -91,12 +91,12 @@ void LinearCombination(double *v, double *u, int n, int s) {
 }
 
 // B <- A * A^T
-float *get_AAt(float *A, int m, int n) {
-    float *B = (float *) malloc(sizeof(float) * m*m);
+double *get_AAt(double *A, int m, int n) {
+    double *B = (double *) malloc(sizeof(double) * m*m);
 
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
-            float r = 0;
+            double r = 0;
             for (int k=0 ; k<n ; k++)
                 r += A[i*n + k] * A[j*n + k];
             B[i*m + j] = r;
@@ -106,12 +106,12 @@ float *get_AAt(float *A, int m, int n) {
 }
 
 // B <- A^T * A
-float *get_AtA(float *A, int m, int n) {
-    float *B = (float *) malloc(sizeof(float) * n*n);
+double *get_AtA(double *A, int m, int n) {
+    double *B = (double *) malloc(sizeof(double) * n*n);
 
     for (int i=0; i<n ; i++)
         for (int j=0 ; j<n ; j++) {
-            float r = 0;
+            double r = 0;
             for (int k=0 ; k<m ; k++)
                 r += A[k*n + i] * A[k*n + j];
             B[i*n + j] = r;
