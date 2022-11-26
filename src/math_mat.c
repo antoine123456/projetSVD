@@ -89,3 +89,33 @@ void LinearCombination(double *v, double *u, int n, int s) {
             v[j] += alpha * u[j*s + i];
     }
 }
+
+// B <- A * A^T
+float *get_AAt(float *A, int m, int n) {
+    float *B = (float *) malloc(sizeof(float) * m*m);
+
+    for (int i=0; i<m ; i++)
+        for (int j=0 ; j<m ; j++) {
+            float r = 0;
+            for (int k=0 ; k<n ; k++)
+                r += A[i*n + k] * A[j*n + k];
+            B[i*m + j] = r;
+        }
+
+    return B;
+}
+
+// B <- A^T * A
+float *get_AtA(float *A, int m, int n) {
+    float *B = (float *) malloc(sizeof(float) * n*n);
+
+    for (int i=0; i<n ; i++)
+        for (int j=0 ; j<n ; j++) {
+            float r = 0;
+            for (int k=0 ; k<m ; k++)
+                r += A[k*n + i] * A[k*n + j];
+            B[i*n + j] = r;
+        }
+
+    return B;
+}
