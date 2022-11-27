@@ -9,6 +9,16 @@ double *GenRandMat(int n) {
     return mat;
 }
 
+/* Generate random matrix of dimensions m*n */
+double *GenRandMat2(int m, int n) {
+    double *mat = (double *) malloc(sizeof(double) * m*n);
+    for (int i = 0; i < m; i++)
+        for (int j = 0; j < n; j++)
+            mat[i*n + j] = (double) (1 + rand() % 100);
+    return mat;
+}
+
+
 /* Generate random vector of length n */
 double *GenRandVec(int n) {
     double *vec = (double *) malloc(sizeof(double) * n);

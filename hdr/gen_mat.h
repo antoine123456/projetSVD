@@ -7,6 +7,8 @@
 
 /* Generate random matrix of dimensions n*n */
 double *GenRandMat(int n);
+/* Generate random matrix of dimensions m*n */
+double *GenRandMat2(int m, int n);
 
 /* Generate random vector of length n */
 double *GenRandVec(int n);
