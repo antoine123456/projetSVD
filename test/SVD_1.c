@@ -7,50 +7,45 @@
 #include <limits.h>
 #include <SVD.h>
 
-int FindEl(double *v, double val, double eps, int n) {
-    double errmin = INT_MAX;
-    for (int i=0 ; i<n ; i++) {
-        double err = fabs(v[i] - val);
-        if (err < errmin)
-            errmin = err;
-    }
-
-    if (errmin < eps)
-        return 1;
-    else
-        return 0;
-}
+#include "test_mat.h"
+#include "test_utils.h"
 
 int main(int argc, char const *argv[])
 {
-    // Initialization
-    int n = 50;
-    double a = 2.4567;
-    double b = 3.6382;
-    double *A = GenInvertibleMatrix9(n, a, b);
+    // Test parameters
+    int n = 50;        // matrix order
+    double eps = 0.01; // error threshold
 
-    // Eigen values
-    double *lambda = malloc(sizeof(double) * n);
-    for (int i=0 ; i<n ; i++)
-        lambda[i] = a + 2*b*cos((i*M_PI)/(n+1));
+    int nerr = 0;
+    double *singvals;
 
-    // Call
-    double* eigenvalues = SVD_1(A, n, n);
+    double *givens_mat = givens(n,n);
+    double *givens_ev = givens_eigenvalues(n);
+    Eigen_to_Singular(givens_ev, n);
+    singvals = SVD_1(givens_mat, n, n);
+    if(!Test_Eigenvalues(givens_ev, singvals, eps, n)) {
+        Print_Error_Mat("SVD_1", "Givens");
+        nerr++;
+    }
 
-    // Test
-    double err_threshold = 0.5;
-    for (int i=0 ; i<n ; i++)
-        assert(FindEl(eigenvalues, fabs(lambda[i]), err_threshold, n) == 1);
-            
+    double *aegerter_mat = aegerter(n);
+    double *aegerter_ev = aegerter_eigenvalues(n);
+    Eigen_to_Singular(aegerter_ev, n);
+    singvals = SVD_1(aegerter_mat, n, n);
+    if(!Test_Eigenvalues(aegerter_ev, singvals, eps, n)) {
+        Print_Error_Mat("SVD_1", "Aegerter");
+        nerr++;
+    }
+
     // Clean memory
-    free(lambda);
-    free(A);
-    free(eigenvalues);
+    free(givens_mat);
+    free(givens_ev);
+    free(aegerter_mat);
+    free(aegerter_ev);
+    free(singvals);
 
-    // Display
-    printf("\033[0;32m");
-    printf("- PASSED (SVD_1)\n");
-    printf("\033[0m");
+    if (nerr == 0)
+        Print_Success("SVD_1");
 
     return 0;
 }

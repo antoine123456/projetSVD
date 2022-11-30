@@ -15,10 +15,23 @@ double* SVD_1(double *A, int m, int n) {
 
     eigen_t Beigens = QR_method(B, nB);
 
-    for (int i=0 ; i<nB ; i++)
-        Beigens.values[i] = sqrt(Beigens.values[i]);
-
     free(B);
     free(Beigens.vectors);
+    
+    // Beigen values are A singular values
     return Beigens.values;
+}
+
+// Call SVD_1 with A transformed into a bidiagonale matrix
+double* SVD_3(double *A, int m, int n) {
+    // Bidiagonalization (GKL)
+    GKL_Bidiag_t b = Bidiagonalization(A, m, n);
+
+    double* singular_values = SVD_1(b.B, m, n);
+
+    free(b.B);
+    free(b.U);
+    free(b.V);
+
+    return singular_values;
 }

@@ -1,5 +1,7 @@
 #include <QR.h>
 
+#include <io_matrix.h>
+
 #define NITER 200    // Nb max of QR method iterations
 #define EPS 0.00001  // Error threshold
 
@@ -66,5 +68,6 @@ eigen_t QR_method(double *A, int n) {
     for (int i=0 ; i<n ; i++)
         eigen.values[i] = A[i*n + i];
     eigen.vectors = QR.Q;
+
     return eigen;
 }

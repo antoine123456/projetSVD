@@ -32,6 +32,18 @@ double DotProdCC(double *A, int j1, int m1, double *B, int j2, int m2, int n) {
     return acc;
 }
 
+/* Dot Prod of
+ * col j1 of matrix A of dim (n,m1)
+ * with
+ * lign i2 of matrix B of dim (m2,n)
+ */
+double DotProdCL(double *A, int j1, int m1, double *B, int i2, int m2, int n) {
+    double acc = 0;
+    for (int k=0 ; k<n ; k++)
+        acc += A[k*m1 + j1] * B[i2*m2 + k];
+    return acc;
+}
+
 /* Computes the norme 2 of vector x of length n */
 double Norme(double *x, int n) {
     return sqrt(DotProd(x,x,n));

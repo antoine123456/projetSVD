@@ -2,26 +2,40 @@
 #include <gen_mat.h>
 #include <io_matrix.h>
 #include <assert.h>
+#include <unistd.h>
+
+#include "test_mat.h"
+#include "test_utils.h"
 
 int main(int argc, char **argv) {
-    int n = 100; int m=60;
-    double *A = GenRandMat2(m, n);
 
-    double *B = Bidiagonalization(A, m, n);
+    int n = 10; int m=10;
+    double *A = givens(m, n);
 
+    GKL_Bidiag_t b = Bidiagonalization(A, m, n);
+
+    double *C = malloc(sizeof(double) * n*n); // temporary square
+    double *D = malloc(sizeof(double) * n*n); // temporary square
+    MatMulTrans(C, A, b.V, n);
+    MatMul(D, b.U, b.B, n);
+    
+    double eps = 0.01;
+    int err = 0;
     for (int i=0 ; i<n ; i++)
-        for (int j=0 ; j<n ; j++) {
-            if (j==i || j==i+1) continue;
-            assert(B[i*n + j] == 0);
-        }
+        if (C[i]-D[i] > eps)
+            err += 1;
 
-    // Display
-    printf("\033[0;32m");
-    printf("- PASSED (Bidiagonalization : Golub-Kahan-Lanczos)\n");
-    printf("\033[0m");
+    if (err==0)
+        Print_Success("Bidiagonalization : Golub-Kahan-Lanczos");
+    else
+        Print_Error("Bidiagonalization");
 
+    free(b.B);
+    free(b.U);
+    free(b.V);
     free(A);
-    free(B);
+    free(C);
+    free(D);
 
     return 0;
 }
