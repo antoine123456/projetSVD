@@ -21,6 +21,8 @@ PROGS=$(patsubst %.c,%,$(PROG_SRCS))
 # Include directori
 INC=-Ihdr
 
+$(shell mkdir -p obj)
+
 all: $(PROGS) $(TESTS)
 
 # Cancel built-in rule
@@ -41,6 +43,7 @@ obj/%.o: src/%.c
 # Clean
 clean:
 	rm -rf bin/* obj/* $(TESTS) $(PROGS)
+	rm -f callgrind*
 
 # Run every executable tests	
 check: $(TESTS)

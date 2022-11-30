@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     double *givens_ev = givens_eigenvalues(n);
     e = QR_method(givens_mat, n);
     if(!Test_Eigenvalues(givens_ev, e.values, eps, n)) {
-        Print_Error_Mat("QR_method", "Givens");
+        Print_Error_Mat("QR Method", "Givens");
         nerr++;
     }
 
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
     double *aegerter_ev = aegerter_eigenvalues(n);
     e = QR_method(aegerter_mat, n);
     if(!Test_Eigenvalues(aegerter_ev, e.values, eps, n)) {
-        Print_Error_Mat("QR_method", "Aegerter");
+        Print_Error_Mat("QR Method", "Aegerter");
         nerr++;
     }
 
@@ -41,11 +41,10 @@ int main(int argc, char const *argv[])
     free(givens_ev);
     free(aegerter_mat);
     free(aegerter_ev);
-    free(e.values);
-    free(e.vectors);
+    freeEigen(e);
 
     if (nerr == 0)
-        Print_Success("QR_method");
+        Print_Success("QR Method");
 
     return 0;
 }

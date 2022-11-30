@@ -45,7 +45,7 @@ int main(int argc, char const *argv[])
     free(singvals);
 
     if (nerr == 0)
-        Print_Success("SVD_1");
+        Print_Success("SVD 1");
 
     return 0;
 }

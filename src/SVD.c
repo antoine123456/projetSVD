@@ -29,9 +29,7 @@ double* SVD_3(double *A, int m, int n) {
 
     double* singular_values = SVD_1(b.B, m, n);
 
-    free(b.B);
-    free(b.U);
-    free(b.V);
+    freeGKL(b);
 
     return singular_values;
 }

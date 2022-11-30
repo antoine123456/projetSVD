@@ -64,3 +64,10 @@ GKL_Bidiag_t Bidiagonalization(double *A, int m, int n) {
     
     return r;
 }
+
+
+void freeGKL(GKL_Bidiag_t b) {
+    free(b.U);
+    free(b.B);
+    free(b.V);
+}

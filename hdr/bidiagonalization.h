@@ -11,5 +11,7 @@ typedef struct {
     double *V;
 } GKL_Bidiag_t;
 
+void freeGKL(GKL_Bidiag_t b);
+
 // B = U*AV Golub-Kahan-Lanczos Bidiagonalization Procedure
 GKL_Bidiag_t Bidiagonalization(double *A, int m, int n);

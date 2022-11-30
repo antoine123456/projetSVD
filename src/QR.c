@@ -1,7 +1,5 @@
 #include <QR.h>
 
-#include <io_matrix.h>
-
 #define NITER 200    // Nb max of QR method iterations
 #define EPS 0.00001  // Error threshold
 
@@ -33,13 +31,16 @@ double GershgorinColTest(double *A, int j, int n) {
  * elements are its eigenvalues */
 eigen_t QR_method(double *A, int n) {
     QR_t QR;
+    QR.Q = (double *) malloc(sizeof(double )* n*n);
+    QR.R = (double *) malloc(sizeof(double )* n*n);
+
     eigen_t eigen;
     eigen.values  = malloc(sizeof(double) * n);
     double *Akp1  = malloc(sizeof(double) * n*n);
 
     for (int k=0 ; k<NITER ; k++) {
         // QR decomposition
-        QR = GramSchmidtMod(A, n);
+        GramSchmidtMod(&QR, A, n);
 
         // Akp1 calcul
         MatMul(Akp1, QR.R, QR.Q, n);
@@ -50,17 +51,12 @@ eigen_t QR_method(double *A, int n) {
             printf("%lf\n", err);
         #endif
         if (err_max < EPS) {
-            free(QR.R);
             Copy(A, Akp1, n);
             break;
         }
 
         // A = Akp1
         Copy(A, Akp1, n);
-
-        free(QR.R);
-        if (k < NITER-1)
-            free(QR.Q);
     }
 
     free(Akp1);
@@ -69,5 +65,12 @@ eigen_t QR_method(double *A, int n) {
         eigen.values[i] = A[i*n + i];
     eigen.vectors = QR.Q;
 
+    free(QR.R);
+
     return eigen;
+}
+
+void freeEigen(eigen_t e) {
+    free(e.values);
+    free(e.vectors);
 }

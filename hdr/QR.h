@@ -12,6 +12,8 @@ typedef struct {
     double *vectors;
 } eigen_t;
 
+void freeEigen(eigen_t e);
+
 /* QR iteration method :
  * A modified such that its' diagonal
  * elements are its eigenvalues */

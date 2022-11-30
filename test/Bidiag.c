@@ -30,9 +30,7 @@ int main(int argc, char **argv) {
     else
         Print_Error("Bidiagonalization");
 
-    free(b.B);
-    free(b.U);
-    free(b.V);
+    freeGKL(b);
     free(A);
     free(C);
     free(D);
