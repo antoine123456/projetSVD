@@ -538,3 +538,266 @@ double *orth_symm_eigenvalues ( int n )
   return lambda;
 }
 /******************************************************************************/
+
+
+double *bab ( int n, double alpha, double beta )
+
+/******************************************************************************/
+/*
+  Purpose:
+
+    BAB returns the BAB matrix.
+
+  Discussion:
+
+    The name is meant to suggest the pattern "B  A  B" formed by
+    the nonzero entries in a general row of the matrix.
+
+  Example:
+
+    N = 5
+    ALPHA = 5, BETA = 2
+
+    5  2  .  .  .
+    2  5  2  .  .
+    .  2  5  2  .
+    .  .  2  5  2
+    .  .  .  2  5
+
+  Properties:
+
+    A is banded, with bandwidth 3.
+
+    A is tridiagonal.
+
+    Because A is tridiagonal, it has property A (bipartite).
+
+    A is Toeplitz: constant along diagonals.
+
+    A is symmetric: A' = A.
+
+    Because A is symmetric, it is normal.
+
+    Because A is normal, it is diagonalizable.
+
+    A is persymmetric: A(I,J) = A(N+1-J,N+1-I).
+
+    The family of matrices is nested as a function of N.
+
+  Licensing:
+
+    This code is distributed under the GNU LGPL license. 
+
+  Modified:
+
+    07 September 2010
+
+  Author:
+
+    John Burkardt
+
+  Reference:
+
+    CM da Fonseca, J Petronilho,
+    Explicit Inverses of Some Tridiagonal Matrices,
+    Linear Algebra and Its Applications,
+    Volume 325, 2001, pages 7-21.
+
+  Parameters:
+
+    Input, int N, the order of the matrix.
+
+    Input, double ALPHA, BETA, the parameters.
+
+    Output, double BAB[N*N], the matrix.
+*/
+{
+  double *a;
+  int i;
+  int j;
+
+  a = ( double * ) malloc ( n * n * sizeof ( double ) );
+
+  for ( j = 0; j < n; j++ )
+  {
+    for ( i = 0; i < n; i++ )
+    {
+      if ( i == j )
+      {
+        a[i+j*n] = alpha;
+      }
+      else if ( i == j + 1 || i == j - 1 )
+      {
+        a[i+j*n] = beta;
+      }
+      else
+      {
+        a[i+j*n] = 0.0;
+      }
+    }
+  }
+  return a;
+}
+/******************************************************************************/
+
+double *bab_eigenvalues ( int n, double alpha, double beta )
+
+/******************************************************************************/
+/*
+  Purpose:
+
+    BAB_EIGENVALUES returns the eigenvalues of the BAB matrix.
+
+  Licensing:
+
+    This code is distributed under the GNU LGPL license. 
+
+  Modified:
+
+    07 September 2010
+
+  Author:
+
+    John Burkardt
+
+  Parameters:
+
+    Input, int N, the order of the matrix.
+
+    Input, double ALPHA, BETA, the parameters.
+
+    Output, double BAB_EIGENVALUES[N], the eigenvalues.
+*/
+{
+  double angle;
+  int i;
+  double *lambda;
+  const double r8_pi = 3.141592653589793;
+
+  lambda = ( double * ) malloc ( n * sizeof ( double ) );
+
+  for ( i = 0; i < n; i++ )
+  {
+    angle = ( double ) ( i + 1 ) * r8_pi / ( double ) ( n + 1 );
+    lambda[i] = alpha + 2.0 * beta * cos ( angle );
+  }
+
+  return lambda;
+}
+/******************************************************************************/
+
+double *lesp ( int m, int n )
+
+/******************************************************************************/
+/*
+  Purpose:
+
+    LESP returns the LESP matrix.
+
+  Formula:
+
+    if ( I - J == 1 ) then
+      A(I,J) = 1 / I
+    else if ( I - J == 0 ) then
+      A(I,J) = - ( 2*I+3 )
+    else if ( I - J == 1 ) then
+      A(I,J) = J
+    else
+      A(I,J) = 0.0
+
+  Example:
+
+    M = 5, N = 5
+
+     -5    2    .    .     .
+     1/2  -7    3    .     .
+      .   1/3  -9    4     .
+      .    .   1/4 -11     5
+      .    .    .   1/5  -13
+
+
+  Properties:
+
+    The matrix is tridiagonal.
+
+    Because A is tridiagonal, it has property A (bipartite).
+
+    A is generally not symmetric: A' /= A.
+
+    The eigenvalues are real, and smoothly distributed in [-2*N-3.5, -4.5].
+
+    The eigenvalues are sensitive.
+
+    The matrix is similar to the symmetric tridiagonal matrix with
+    the same diagonal entries and with off-diagonal entries 1,
+    via a similarity transformation using the diagonal matrix
+    D = diagonal ( 1, 2, ..., N ).
+
+    The family of matrices is nested as a function of N.
+
+  Licensing:
+
+    This code is distributed under the GNU LGPL license.
+
+  Modified:
+
+    06 October 2010
+
+  Author:
+
+    John Burkardt
+
+  Reference:
+
+    Wim Lenferink, MN Spijker,
+    On the use of stability regions in the numerical analysis of initial
+    value problems,
+    Mathematics of Computation,
+    Volume 57, 1991, pages 221-237.
+
+    Lloyd Trefethen,
+    Pseudospectra of matrices,
+    in Numerical Analysis 1991,
+    Proceedings of the 14th Dundee Conference,
+    D F Griffiths and G A Watson, editors,
+    Pitman Research Notes in Mathematics, volume 260,
+    Longman Scientific and Technical, Essex, UK, 1992, pages 234-266.
+
+  Parameters:
+
+    Input, int M, N, the order of the matrix.
+
+    Output, double LESP[M*N], the matrix.
+*/
+{
+  double *a;
+  int i;
+  int j;
+
+  a = ( double * ) malloc ( n * n * sizeof ( double ) );
+
+  for ( j = 0; j < n; j++ )
+  {
+    for ( i = 0; i < m; i++ )
+    {
+      if ( i - j == 1 )
+      {
+        a[i+j*m] = 1.0 / ( double ) ( i + 1 );
+      }
+      else if ( i - j == 0 )
+      {
+        a[i+j*m] = - ( double ) ( 2 * i + 5 );
+      }
+      else if ( i - j == -1 )
+      {
+        a[i+j*m] = ( double ) ( j + 1 );
+      }
+      else
+      {
+        a[i+j*m] = 0.0;
+      }
+    }
+  }
+  return a;
+}
+/******************************************************************************/

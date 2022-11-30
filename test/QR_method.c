@@ -13,12 +13,20 @@
 int main(int argc, char const *argv[])
 {
     // Test parameters
-    int n = 10;        // matrix order
-    double eps = 0.5; // error threshold
+    int n = 50;        // matrix order
+    double eps = 0.1; // error threshold
 
     int nerr = 0;
     eigen_t e;
 
+    double *bab_mat = bab(n, 5, 2);
+    double *bab_ev = bab_eigenvalues(n, 5, 2);
+    e = QR_method_Tridiag(bab_mat, n);
+    if(!Test_Eigenvalues(bab_ev, e.values, eps, n)) {
+        Print_Error_Mat("QR Method Tridiag", "Bab");
+        nerr++;
+    }
+    
     double *givens_mat = givens(n,n);
     double *givens_ev = givens_eigenvalues(n);
     e = QR_method(givens_mat, n);
@@ -34,7 +42,6 @@ int main(int argc, char const *argv[])
         Print_Error_Mat("QR Method", "Aegerter");
         nerr++;
     }
-
 
     // Clean memory
     free(givens_mat);

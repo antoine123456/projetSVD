@@ -16,3 +16,6 @@ void GramSchmidt(QR_t *QR, double *A, int n);
 
 // QR decomposition of A of dim (n,n) using the modified version of the Gram Schmidt process
 void GramSchmidtMod(QR_t *QR, double *A, int n);
+
+// Gram-Schmidt Modified Process for a tridiagonal symmetric matrix
+void GramSchmidtMod_Tridiag(QR_t *QR, double *A, int n);

@@ -19,6 +19,11 @@ void freeEigen(eigen_t e);
  * elements are its eigenvalues */
 eigen_t QR_method(double *A, int n);
 
+/* QR iteration method for a tridiagonal symmetric matrix :
+ * A modified such that its' trangular sup
+ * elements are its eigenvalues */
+eigen_t QR_method_Tridiag(double *A, int n);
+
 /* QR iteration method with shift :
  * A is modified such that its diagonal
  * elements are its eigenvalues */
