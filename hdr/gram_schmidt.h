@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdlib.h>
+#include <cblas.h>
+
 #include <math_mat.h>
 
 // Contains the QR decomposition of a matrix

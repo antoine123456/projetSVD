@@ -5,7 +5,7 @@
 
 CC=gcc
 CFLAGS=-g -Wall
-LDFLAGS=-lm -llapacke -fopenmp
+LDFLAGS=-lm -llapacke -fopenmp -lcblas
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))

@@ -81,10 +81,13 @@ void MatMulTrans(double *C, double *A, double *B, int n) {
 // C will be tridiagonal
 void MatMul_Tridiag(double *C, double *A, double *B, int n) {
     for (int k=0 ; k<n ; k++) {
-        C[k*n + k]     = DotProdLC(A, k  , B, k  , n, n);
+        //C[k*n + k]     = DotProdLC(A, k  , B, k  , n, n);
+        C[k*n + k] = cblas_ddot(n, &A[k*n], 1, &B[k], n);
         if (k==n-1) continue;
-        C[(k+1)*n + k] = DotProdLC(A, k+1, B, k  , n, n);
-        C[k*n + k+1]   = DotProdLC(A, k  , B, k+1, n, n);
+        // C[(k+1)*n + k] = DotProdLC(A, k+1, B, k  , n, n);
+        C[(k+1)*n + k] = cblas_ddot(n, &A[(k+1)*n], 1, &B[k], n);
+        //C[k*n + k+1]   = DotProdLC(A, k  , B, k+1, n, n);
+        C[k*n + k+1]   = cblas_ddot(n, &A[k*n], 1, &B[k+1], n);
     }
 }
 

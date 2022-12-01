@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <stdlib.h>
+#include <cblas.h>
 
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n);
