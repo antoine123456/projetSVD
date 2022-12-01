@@ -48,7 +48,7 @@ void GramSchmidtMod_Tridiag(QR_t *QR, double *A, int n) {
             QR->Q[i*n + k] = A[i*n + k];
             
         for (int j=0 ; j<k ; j++) {
-            QR->R[j*n + k] = DotProdCC(QR->Q, j, n, QR->Q, k, n, len);
+            QR->R[j*n + k] = DotProdCC(QR->Q, j, n, QR->Q, k, n, j+2);
 
             for (int i=0 ; i<len ; i++)
                 QR->Q[i*n + k] -= QR->R[j*n + k] * QR->Q[i*n + j];

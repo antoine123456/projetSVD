@@ -76,7 +76,7 @@ eigen_t QR_method_Tridiag(double *A, int n) {
         GramSchmidtMod_Tridiag(&QR, A, n);
 
         // Akp1 = RQ
-        MatMul(A, QR.R, QR.Q, n);
+        MatMul_Tridiag(A, QR.R, QR.Q, n);
 
         // Error check
         double err_max = GershgorinTest(A, n);

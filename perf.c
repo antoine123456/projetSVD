@@ -22,4 +22,4 @@ int main(int argc, char const *argv[])
     free(givens_mat);
 
     return 0;
-}
+}   

@@ -76,6 +76,18 @@ void MatMulTrans(double *C, double *A, double *B, int n) {
         }
 }
 
+
+// C = A*B with C, A, B matrices of dim (n,n)
+// C will be tridiagonal
+void MatMul_Tridiag(double *C, double *A, double *B, int n) {
+    for (int k=0 ; k<n ; k++) {
+        C[k*n + k]     = DotProdLC(A, k  , B, k  , n, n);
+        if (k==n-1) continue;
+        C[(k+1)*n + k] = DotProdLC(A, k+1, B, k  , n, n);
+        C[k*n + k+1]   = DotProdLC(A, k  , B, k+1, n, n);
+    }
+}
+
 // Copy B in A
 void Copy(double *A, double *B, int n) {
     for (int i=0 ; i<n ; i++)

@@ -39,6 +39,10 @@ void MatMul(double *C, double *A, double *B, int n);
 // C = A^T*B with C, A, B matrices of dim (n,n)
 void MatMulTrans(double *C, double *A, double *B, int n);
 
+// C = A*B with C, A, B matrices of dim (n,n)
+// C will be tridiagonal
+void MatMul_Tridiag(double *C, double *A, double *B, int n);
+
 // Copy B in A
 void Copy(double *A, double *B, int n);
 
