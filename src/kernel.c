@@ -137,29 +137,40 @@ pivot_t chercher_pivot(double *A, int k, int n)
     }
     return pivot;
 }
-double *eye(int n){
-    double* tmp = (double *)calloc(n, sizeof(double));
-    for (int i = 0; i < n; i++){
-        for (int j = 0; j < n; j++){
-            if(j==i){
-                tmp[i*n+j] = 0;
+double *eye(int n)
+{
+    double *tmp = (double *)calloc(n, sizeof(double));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (j == i)
+            {
+                tmp[i * n + j] = 0;
             }
         }
     }
     return tmp;
 }
-double *imker(double *A, int n){
-    double *copieA= (double *)malloc(n*sizeof(double));
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
-            copieA[i*n+j]=A[i*n+j];
+double *imker(double *A, int n)
+{
+    double *copieA = (double *)malloc(n * sizeof(double));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            copieA[i * n + j] = A[i * n + j];
         }
     }
-    double *B=eye(n);
-    int k =0;
-    while(true){
+    double *B = eye(n);
+    int k = 0;
+    while (true)
+    {
         pivot_t res = chercher_pivot(A, k, n);
-        if(!res.ok)
+        if (!res.ok)
+        {
+            break;
+        }
     }
 }
 double *transpose(double *A, int n);
