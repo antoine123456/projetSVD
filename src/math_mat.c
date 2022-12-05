@@ -138,10 +138,13 @@ double *get_AtA(double *A, int m, int n) {
 //C = aA+bB
 void C_aAplusbB(int dim,double*C,double a,double *A, double b,double *B){
   int offset =0;
+  //printf("C_aAplusbB\n");
   for(int i =0; i<dim ; i++){
     for(int j= 0; j<dim; j++){
       offset = i*dim+j;
       C[offset] = a*A[offset] + b*B[offset];
+      //printf("C[%d] = %lf = ",offset,C[offset]);
+    //  printf("+a*A[%d]+b*B[%d] = (%lf)*%lf + (%lf)*%lf\n ",offset,offset,a,A[offset], b,B[offset] );
     }
   }
 }

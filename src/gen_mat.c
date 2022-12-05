@@ -60,9 +60,11 @@ double *GenInvertibleMatrix9(int n, double a, double b) {
     return A;
 }
 
-double *GenIdentityMatrix(int n){
-    double *Eye = calloc(n*n,sizeof(double*));
-    printf("n=%d m = %d\n",n);
+double *GenIdentityMatrix(int n, double *Eye){
+    if(Eye ==NULL){
+      Eye = calloc(n*n,sizeof(double*));
+    }
+    //printf("n=%d m = %d\n",n);
     for (int i= 0; i<n;i++){
       Eye[i*n+i] = 1.0;
     }

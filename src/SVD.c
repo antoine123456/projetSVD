@@ -1,5 +1,5 @@
 #include <SVD.h>
-
+#include "trigonalisation.h"
 #include <io_matrix.h>
 
 double* SVD_1(double *A, int m, int n) {
@@ -19,7 +19,7 @@ double* SVD_1(double *A, int m, int n) {
 
     free(B);
     free(Beigens.vectors);
-    
+
     // Beigen values are A singular values
     return Beigens.values;
 }
@@ -41,7 +41,7 @@ double* SVD_1_Tridiag(double *A, int m, int n) {
 
     free(B);
     free(Beigens.vectors);
-    
+
     // Beigen values are A singular values
     return Beigens.values;
 }
@@ -56,4 +56,40 @@ double* SVD_3(double *A, int m, int n) {
     freeGKL(b);
 
     return singular_values;
+}
+
+double* SVD_Hessenberg(double *A, int m, int n) {
+    double *B;  // will store A^TA or AA^T
+    double *H; // hessenberg form of B as B = P'HP
+    double *P; // householder matrix associate : B  =P'HP
+    int nB;    // B dimension
+
+  // Compute A^TA or AA^T depending on the comparaison between n and m
+    if (n > m) {
+        B = get_AtA(A, m, n);
+        nB = n;
+        PrintMat(B,nB,nB);
+        H = calloc(nB*nB,sizeof(double*));
+        P = calloc(nB*nB,sizeof(double*));
+    } else {
+        B = get_AAt(A, m, n);
+        nB = m;
+        PrintMat(B,nB,nB);
+        H = calloc(nB*nB,sizeof(double*));
+        P = calloc(nB*nB,sizeof(double*));
+    }
+    Hess_Reduction(B, nB, H,P);
+    printf("H matrice : \n");
+    PrintMat(H,nB,nB);
+    printf("H matrice : \n");
+    PrintMat(P,nB,nB);
+    eigen_t Beigens = QR_method_Tridiag(H, nB);
+
+    free(B);
+  //  free(H);
+  //  free(P);
+    free(Beigens.vectors);
+
+    // Beigen values are A singular values
+    return Beigens.values;
 }

@@ -20,4 +20,4 @@ double *GenInvertibleMatrix(int n);
 double *GenInvertibleMatrix9(int n, double a, double b);
 
 /* Generate a identity matrix of dimnsion n*m*/
-double *GenIdentityMatrix(int n);
+double *GenIdentityMatrix(int n,double *Q);
