@@ -68,21 +68,21 @@ double* SVD_Hessenberg(double *A, int m, int n) {
     if (n > m) {
         B = get_AtA(A, m, n);
         nB = n;
-        PrintMat(B,nB,nB);
+      //  PrintMat(B,nB,nB);
         H = calloc(nB*nB,sizeof(double*));
         P = calloc(nB*nB,sizeof(double*));
     } else {
         B = get_AAt(A, m, n);
         nB = m;
-        PrintMat(B,nB,nB);
+    //    PrintMat(B,nB,nB);
         H = calloc(nB*nB,sizeof(double*));
         P = calloc(nB*nB,sizeof(double*));
     }
     Hess_Reduction(B, nB, H,P);
-    printf("H matrice : \n");
-    PrintMat(H,nB,nB);
-    printf("H matrice : \n");
-    PrintMat(P,nB,nB);
+  //  printf("H matrice : \n");
+  //  PrintMat(H,nB,nB);
+  //  printf("Q matrice : \n");
+//    PrintMat(P,nB,nB);
     eigen_t Beigens = QR_method_Tridiag(H, nB);
 
     free(B);
