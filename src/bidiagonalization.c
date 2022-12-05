@@ -19,43 +19,59 @@ double* gen_unit_vec(int n) {
 }
 
 // B = U*AV Golub-Kahan-Lanczos Bidiagonalization Procedure
-double *Bidiagonalization(double *A, int m, int n) {
-    double alpha;
-    double beta = 0;
-    double *v = gen_unit_vec(n);
-    double *u = (double*) malloc(sizeof(double) * m);
-    double *B = (double*) calloc(n*n, sizeof(double));
+GKL_Bidiag_t Bidiagonalization(double *A, int m, int n) {
+    double *B = (double *) calloc(m*n, sizeof(double));
+    double *U = (double *) calloc(m*m, sizeof(double));
+    double *V = (double *) calloc(n*n, sizeof(double));
 
-    for (int k=0 ; k<n ; k++) {
+    // V[:,0] = unit_vector
+    double *v0 = gen_unit_vec(n);
+    for (int i=0 ; i<n ; i++)
+        V[i*n + 0] = v0[i];
+    free(v0);
+
+    for (int k=0 ; k<m ; k++) {
         // u_k = A*v_k - beta_{k-1}u_{k-1}
-        for (int i=0 ; i<m ; i++)
-            u[i] = DotProdLC(A, i, v, 1, 1, n) - beta * u[i];
+        for (int i=0 ; i<m ; i++) {
+            // U[i*m + k] = DotProdLC(A, i, V, k, n, n);
+            U[i*m + k] = cblas_ddot(n, &A[i*n], 1, &V[k], n);
+            if (k==0) continue;
+            U[i*m + k] -= B[(k-1)*n + k] * U[i*m + k-1];
+        }
 
         // alpha_k = norm(uk)
-        alpha = Norme(u, m);
+        // B[k*n + k] = NormeC(U, k, m, m);
+        B[k*n + k] = cblas_dnrm2(m, &U[k], m);
 
         // u_k = u_k/alpha_k
         for (int i=0 ; i<m ; i++)
-            u[i] /= alpha;
+            U[i*m + k] /= B[k*n + k];
+            
+        if (k==n-1) continue;
         
         // v_{k+1} = A^T*u_k - alpha_k * v_k
-        for (int j=0 ; j<n ; j++)
-            v[j] = DotProdCC(A, j, n, u, 1, 1, m) - alpha * v[j];
+        for (int i=0 ; i<n ; i++)
+            // V[i*n + k+1] = DotProdCC(A, i, n, U, k, m, m) - B[k*n + k] * V[i*n + k];
+            V[i*n + k+1] = cblas_ddot(m, &A[i], n, &U[k], m) - B[k*n + k] * V[i*n + k];
 
-        // Beta = norm(v_{k+1})
-        beta = Norme(v, n);
+
+        // Beta_k = norm(v_{k+1})
+        // B[k*n + k+1] = NormeC(V, k+1, n, n);
+        B[k*n + k+1] = cblas_dnrm2(n, &V[k+1], n);
 
         // v_{k+1} = v{k+1} / beta_k
-        for (int j=0 ; j<n ; j++)
-            v[j] /= beta;
-        
-        B[k*n + k] = alpha;
-        if (k<n-1)
-            B[k*n + k + 1] = beta;
+        for (int i=0 ; i<n ; i++)
+            V[i*n + k+1] /= B[k*n + k+1];
     }
 
-    free(v);
-    free(u);
+    GKL_Bidiag_t r = {U, B, V};
     
-    return B;
+    return r;
+}
+
+
+void freeGKL(GKL_Bidiag_t b) {
+    free(b.U);
+    free(b.B);
+    free(b.V);
 }

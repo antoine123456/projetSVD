@@ -33,6 +33,18 @@ double DotProdCC(double *A, int j1, int m1, double *B, int j2, int m2, int n) {
     return acc;
 }
 
+/* Dot Prod of
+ * col j1 of matrix A of dim (n,m1)
+ * with
+ * lign i2 of matrix B of dim (m2,n)
+ */
+double DotProdCL(double *A, int j1, int m1, double *B, int i2, int m2, int n) {
+    double acc = 0;
+    for (int k=0 ; k<n ; k++)
+        acc += A[k*m1 + j1] * B[i2*m2 + k];
+    return acc;
+}
+
 /* Computes the norme 2 of vector x of length n */
 double Norme(double *x, int n) {
     return sqrt(DotProd(x,x,n));
@@ -63,6 +75,21 @@ void MatMulTrans(double *C, double *A, double *B, int n) {
                 r += A[k*n + i] * B[k*n + j];
             C[i*n + j] = r;
         }
+}
+
+
+// C = A*B with C, A, B matrices of dim (n,n)
+// C will be tridiagonal
+void MatMul_Tridiag(double *C, double *A, double *B, int n) {
+    for (int k=0 ; k<n ; k++) {
+        //C[k*n + k]     = DotProdLC(A, k  , B, k  , n, n);
+        C[k*n + k] = cblas_ddot(n, &A[k*n], 1, &B[k], n);
+        if (k==n-1) continue;
+        // C[(k+1)*n + k] = DotProdLC(A, k+1, B, k  , n, n);
+        C[(k+1)*n + k] = cblas_ddot(n, &A[(k+1)*n], 1, &B[k], n);
+        //C[k*n + k+1]   = DotProdLC(A, k  , B, k+1, n, n);
+        C[k*n + k+1]   = cblas_ddot(n, &A[k*n], 1, &B[k+1], n);
+    }
 }
 
 // Copy B in A

@@ -6,51 +6,52 @@
 #include <assert.h>
 #include <limits.h>
 
-int FindEl(double *v, double val, double eps, int n) {
-    double errmin = INT_MAX;
-    for (int i=0 ; i<n ; i++) {
-        double err = fabs(v[i] - val);
-        if (err < errmin)
-            errmin = err;
-    }
+#include "test_mat.h"
+#include "test_utils.h"
 
-    if (errmin < eps)
-        return 1;
-    else
-        return 0;
-}
 
 int main(int argc, char const *argv[])
 {
-    // Initialization
-    int n = 50;
-    double a = 2.4567;
-    double b = 3.6382;
-    double *A = GenInvertibleMatrix9(n, a, b);
+    // Test parameters
+    int n = 50;        // matrix order
+    double eps = 0.1; // error threshold
 
-    // Eigen values
-    double *lambda = malloc(sizeof(double) * n);
-    for (int i=0 ; i<n ; i++)
-        lambda[i] = a + 2*b*cos((i*M_PI)/(n+1));
+    int nerr = 0;
+    eigen_t e;
 
+    double *bab_mat = bab(n, 5, 2);
+    double *bab_ev = bab_eigenvalues(n, 5, 2);
+    e = QR_method_Tridiag(bab_mat, n);
+    if(!Test_Eigenvalues(bab_ev, e.values, eps, n)) {
+        Print_Error_Mat("QR Method Tridiag", "Bab");
+        nerr++;
+    }
+    
+    double *givens_mat = givens(n,n);
+    double *givens_ev = givens_eigenvalues(n);
+    e = QR_method(givens_mat, n);
+    if(!Test_Eigenvalues(givens_ev, e.values, eps, n)) {
+        Print_Error_Mat("QR Method", "Givens");
+        nerr++;
+    }
 
-    // Call
-    eigen_t eigen = QR_method(A, n);
+    double *aegerter_mat = aegerter(n);
+    double *aegerter_ev = aegerter_eigenvalues(n);
+    e = QR_method(aegerter_mat, n);
+    if(!Test_Eigenvalues(aegerter_ev, e.values, eps, n)) {
+        Print_Error_Mat("QR Method", "Aegerter");
+        nerr++;
+    }
 
-    // Test
-    double err_threshold = 0.5;
-    for (int i=0 ; i<n ; i++)
-        assert(FindEl(eigen.values, lambda[i], err_threshold, n) == 1);
-            
     // Clean memory
-    free(lambda);
-    free(A);
-    free(eigen.values); free(eigen.vectors);
+    free(givens_mat);
+    free(givens_ev);
+    free(aegerter_mat);
+    free(aegerter_ev);
+    freeEigen(e);
 
-    // Display
-    printf("\033[0;32m");
-    printf("- PASSED (QR_method)\n");
-    printf("\033[0m");
+    if (nerr == 0)
+        Print_Success("QR Method");
 
     return 0;
 }

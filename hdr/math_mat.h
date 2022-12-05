@@ -3,8 +3,12 @@
 
 #include <math.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include "my_seq_blas1.h"
 #include "my_seq_blas2.h"
+=======
+#include <cblas.h>
+>>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
 
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n);
@@ -22,6 +26,13 @@ double DotProdLC(double *A, int i1, double *B, int j2, int m, int n);
  */
 double DotProdCC(double *A, int j1, int m1, double *B, int j2, int m2, int n);
 
+/* Dot Prod of
+ * col j1 of matrix A of dim (n,m1)
+ * with
+ * lign i2 of matrix B of dim (m2,n)
+ */
+double DotProdCL(double *A, int j1, int m1, double *B, int i2, int m2, int n);
+
 /* Computes the norme 2 of vector x of length n */
 double Norme(double *x, int n);
 
@@ -33,6 +44,10 @@ void MatMul(double *C, double *A, double *B, int n);
 
 // C = A^T*B with C, A, B matrices of dim (n,n)
 void MatMulTrans(double *C, double *A, double *B, int n);
+
+// C = A*B with C, A, B matrices of dim (n,n)
+// C will be tridiagonal
+void MatMul_Tridiag(double *C, double *A, double *B, int n);
 
 // Copy B in A
 void Copy(double *A, double *B, int n);

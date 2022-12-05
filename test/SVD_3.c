@@ -13,7 +13,7 @@
 int main(int argc, char const *argv[])
 {
     // Test parameters
-    int n = 50;        // matrix order
+    int n = 10;        // matrix order
     double eps = 0.01; // error threshold
 
     int nerr = 0;
@@ -22,18 +22,27 @@ int main(int argc, char const *argv[])
     double *givens_mat = givens(n,n);
     double *givens_ev = givens_eigenvalues(n);
     Eigen_to_Singular(givens_ev, n);
-    singvals = SVD_1(givens_mat, n, n);
+    singvals = SVD_3(givens_mat, n, n);
     if(!Test_Eigenvalues(givens_ev, singvals, eps, n)) {
-        Print_Error_Mat("SVD_1", "Givens");
-        nerr++;
+        // Print_Error_Mat("SVD_3", "Givens");
+        // nerr++;
     }
 
     double *aegerter_mat = aegerter(n);
     double *aegerter_ev = aegerter_eigenvalues(n);
     Eigen_to_Singular(aegerter_ev, n);
-    singvals = SVD_1(aegerter_mat, n, n);
+    singvals = SVD_3(aegerter_mat, n, n);
     if(!Test_Eigenvalues(aegerter_ev, singvals, eps, n)) {
-        Print_Error_Mat("SVD_1", "Aegerter");
+        Print_Error_Mat("SVD_3", "Aegerter");
+        nerr++;
+    }
+
+    double *bab_mat = bab(n, 5, 2);
+    double *bab_ev = bab_eigenvalues(n, 5, 2);
+    Eigen_to_Singular(bab_ev, n);
+    singvals = SVD_3(bab_mat, n, n);
+    if(!Test_Eigenvalues(bab_ev, singvals, eps, n)) {
+        Print_Error_Mat("SVD_3", "Bab");
         nerr++;
     }
 
@@ -45,7 +54,7 @@ int main(int argc, char const *argv[])
     free(singvals);
 
     if (nerr == 0)
-        Print_Success("SVD 1");
+        Print_Success("SVD 3");
 
     return 0;
 }

@@ -5,7 +5,11 @@
 
 CC=gcc
 CFLAGS=-g -Wall
+<<<<<<< HEAD
 LDFLAGS=-lm -llapacke -fopenmp -lcmocka
+=======
+LDFLAGS=-lm -llapacke -fopenmp -lcblas
+>>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))
@@ -20,6 +24,8 @@ PROGS=$(patsubst %.c,%,$(PROG_SRCS))
 
 # Include directori
 INC=-Ihdr
+
+$(shell mkdir -p obj)
 
 all: $(PROGS) $(TESTS)
 
@@ -41,6 +47,7 @@ obj/%.o: src/%.c
 # Clean
 clean:
 	rm -rf bin/* obj/* $(TESTS) $(PROGS)
+	rm -f callgrind*
 
 # Run every executable tests
 check: $(TESTS)
