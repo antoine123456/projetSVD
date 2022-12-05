@@ -3,12 +3,11 @@
 
 #include <math.h>
 #include <stdlib.h>
-<<<<<<< HEAD
+
 #include "my_seq_blas1.h"
 #include "my_seq_blas2.h"
-=======
+
 #include <cblas.h>
->>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
 
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n);
