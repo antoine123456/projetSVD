@@ -5,7 +5,10 @@
 
 CC=gcc
 CFLAGS=-g -Wall
-LDFLAGS=-lm -llapacke -fopenmp -lcblas
+#<<<<<<< HEAD
+#=======
+LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas
+#>>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))
@@ -38,14 +41,14 @@ test/%: test/%.c $(OBJS)
 
 # Generate every object file
 obj/%.o: src/%.c
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@ $(LDFLAGS)	
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@ $(LDFLAGS)
 
 # Clean
 clean:
 	rm -rf bin/* obj/* $(TESTS) $(PROGS)
 	rm -f callgrind*
 
-# Run every executable tests	
+# Run every executable tests
 check: $(TESTS)
 	@echo
 	for test in $(TESTS) ; do ./$$test ; done

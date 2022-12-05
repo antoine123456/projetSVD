@@ -18,3 +18,6 @@ double *GenInvertibleMatrix(int n);
 
 /* Generate an invertible matrix of dim (n,n) */
 double *GenInvertibleMatrix9(int n, double a, double b);
+
+/* Generate a identity matrix of dimnsion n*m*/
+double *GenIdentityMatrix(int n,double *Q);
