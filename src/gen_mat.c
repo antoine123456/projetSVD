@@ -35,7 +35,7 @@ double *GenInvertibleMatrix(int n) {
     // Elements
     double el;
     for (int i=0 ; i<n ; i++)
-        for (int j=0 ; j<n ; j++) { 
+        for (int j=0 ; j<n ; j++) {
             (j<n && i>j) ? (el=n+1-i) : (el=n+1-j);
             A[i*n + j] = el;
         }
@@ -58,4 +58,13 @@ double *GenInvertibleMatrix9(int n, double a, double b) {
     A[(n-1)*n + n-1] = a; A[(n-1)*n + n-2] = b;
 
     return A;
+}
+
+double *GenIdentityMatrix(int n){
+    double *Eye = calloc(n*n,sizeof(double*));
+    printf("n=%d m = %d\n",n);
+    for (int i= 0; i<n;i++){
+      Eye[i*n+i] = 1.0;
+    }
+    return Eye;
 }

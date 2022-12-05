@@ -1,4 +1,5 @@
 #include <math_mat.h>
+#include<math.h>
 
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n) {
@@ -118,4 +119,31 @@ double *get_AtA(double *A, int m, int n) {
         }
 
     return B;
+}
+
+//C = aA+bB
+void C_aAplusbB(int dim,double*C,double a,double *A, double b,double *B){
+  int offset =0;
+  for(int i =0; i<dim ; i++){
+    for(int j= 0; j<dim; j++){
+      offset = i*dim+j;
+      C[offset] = a*A[offset] + b*B[offset];
+    }
+  }
+}
+// Tr(A) = sum(Aii)
+double Trace_Mat(int dim, double *A){
+  double trace =0.0;
+  for(int i=0; i<dim; i++){
+    trace = trace +A[i*dim+i];
+  }
+  return trace;
+}
+
+// sqrt(Trace(AAt))
+double norme_Mat(int dim, double *A){
+  double norme = 0.0;
+  double* B;
+  B= get_AAt(A,dim,dim);
+  return sqrt(Trace_Mat(dim,B));
 }

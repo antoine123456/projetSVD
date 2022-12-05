@@ -5,7 +5,7 @@
 
 CC=gcc
 CFLAGS=-g -Wall
-LDFLAGS=-lm -llapacke -fopenmp
+LDFLAGS=-lm -llapacke -fopenmp -lcmocka
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))
@@ -36,13 +36,13 @@ test/%: test/%.c $(OBJS)
 
 # Generate every object file
 obj/%.o: src/%.c
-	$(CC) $(CFLAGS) $(INC) -c $< -o $@ $(LDFLAGS)	
+	$(CC) $(CFLAGS) $(INC) -c $< -o $@ $(LDFLAGS)
 
 # Clean
 clean:
 	rm -rf bin/* obj/* $(TESTS) $(PROGS)
 
-# Run every executable tests	
+# Run every executable tests
 check: $(TESTS)
 	@echo
 	for test in $(TESTS) ; do ./$$test ; done
