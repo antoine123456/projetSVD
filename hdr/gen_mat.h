@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 /* Generate random matrix of dimensions n*n */
-double *GenRandMat(int n);
+void GenRandMat(int n,double* mat);
 /* Generate random matrix of dimensions m*n */
-double *GenRandMat2(int m, int n);
+void GenRandMat2(int m, int n, double *mat);
 
 /* Generate random vector of length n */
 double *GenRandVec(int n);

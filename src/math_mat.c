@@ -107,7 +107,8 @@ void LinearCombination(double *v, double *u, int n, int s) {
 
 // B <- A * A^T
 double *get_AAt(double *A, int m, int n) {
-    double *B = (double *) malloc(sizeof(double) * m*m);
+    double *B = NULL;
+    B =  malloc(m*m*sizeof(double*));
 
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
@@ -122,7 +123,8 @@ double *get_AAt(double *A, int m, int n) {
 
 // B <- A^T * A
 double *get_AtA(double *A, int m, int n) {
-    double *B = (double *) malloc(sizeof(double) * n*n);
+    double *B = NULL;
+    B = (double *) malloc(n*n*sizeof(double*));
 
     for (int i=0; i<n ; i++)
         for (int j=0 ; j<n ; j++) {

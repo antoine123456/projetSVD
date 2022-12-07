@@ -124,13 +124,21 @@ void Hess_Reduction(double *A, int n, double* H, double* Q){
         Q[q*n+p] = Q[q*n+p] - 2.0*v[p-(j+1)]*save3[q];
       }
     }
-    //printf("Q : \n");
-    //PrintMat(Q,n,n);
-    //printf("H : \n");
-    //PrintMat(H,n,n);
+  //  printf("Q : \n");
+  //  PrintMat(Q,n,n);
+  //  printf("H : \n");
+//    PrintMat(H,n,n);
 
   }
-  //free(u);
-  //free(v);
+  ///  printf("Q : \n");
+  //  PrintMat(Q,n,n);
+  //  printf("H : \n");
+  //  PrintMat(H,n,n);
+
+  free(u);
+  free(v);
+  free(save);
+  free(save2);
+  free(save3);
 
 }

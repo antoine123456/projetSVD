@@ -59,35 +59,38 @@ double* SVD_3(double *A, int m, int n) {
 }
 
 double* SVD_Hessenberg(double *A, int m, int n) {
-    double *B;  // will store A^TA or AA^T
-    double *H; // hessenberg form of B as B = P'HP
-    double *P; // householder matrix associate : B  =P'HP
+    double *B =NULL;  // will store A^TA or AA^T
+    double *H = NULL; // hessenberg form of B as B = P'HP
+    double *P= NULL; // householder matrix associate : B  =P'HP
     int nB;    // B dimension
-
+    printf("A:\n");
+    //PrintMat(A,m,n);
   // Compute A^TA or AA^T depending on the comparaison between n and m
-    if (n > m) {
+    if (n < m) {
         B = get_AtA(A, m, n);
         nB = n;
-      //  PrintMat(B,nB,nB);
-        H = calloc(nB*nB,sizeof(double*));
-        P = calloc(nB*nB,sizeof(double*));
+
     } else {
         B = get_AAt(A, m, n);
         nB = m;
-    //    PrintMat(B,nB,nB);
-        H = calloc(nB*nB,sizeof(double*));
-        P = calloc(nB*nB,sizeof(double*));
+
     }
+    H = calloc(nB*nB,sizeof(double*));
+    P = calloc(nB*nB,sizeof(double*));
     Hess_Reduction(B, nB, H,P);
-  //  printf("H matrice : \n");
+  //  printf("H:\n");
   //  PrintMat(H,nB,nB);
-  //  printf("Q matrice : \n");
+  //  printf("P:\n");
 //    PrintMat(P,nB,nB);
+
     eigen_t Beigens = QR_method_Tridiag(H, nB);
+  //  printf("H apres QR:\n");
+  //  PrintMat(H,nB,nB);
+
 
     free(B);
-  //  free(H);
-  //  free(P);
+    free(H);
+    free(P);
     free(Beigens.vectors);
 
     // Beigen values are A singular values

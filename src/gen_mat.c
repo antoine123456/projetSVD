@@ -1,21 +1,33 @@
 #include <gen_mat.h>
 
 /* Generate random matrix of dimensions n*n */
-double *GenRandMat(int n) {
-    double *mat = (double *) malloc(sizeof(double) * n*n);
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
+void  GenRandMat(int n,double* mat) {
+  //  mat = (double *) malloc(sizeof(double) * n*n);
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
             mat[i*n + j] = (double) (1 + rand() % 100);
-    return mat;
+            if(i == j){
+             mat[i*n + j] = 10.0*mat[i*n + j];
+           }
+         }
+       }
+   //return mat;
 }
 
 /* Generate random matrix of dimensions m*n */
-double *GenRandMat2(int m, int n) {
-    double *mat = (double *) malloc(sizeof(double) * m*n);
-    for (int i = 0; i < m; i++)
-        for (int j = 0; j < n; j++)
+void  GenRandMat2(int m, int n, double* mat) {
+    //mat = (double *) malloc(sizeof(double) * m*n);
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
             mat[i*n + j] = (double) (1 + rand() % 100);
-    return mat;
+            if(i == j){
+             mat[i*n + j] = 10.0*mat[i*n + j];
+           }
+
+          }
+        }
+
+   return mat;
 }
 
 
