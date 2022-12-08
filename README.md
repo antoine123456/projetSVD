@@ -36,7 +36,7 @@ Bidiag.c   math_mat.c    QR_method.c  SVD_3.c  test_utils.h
 D'abord on doit calculer soit les eigenvalues de la matrice $B=AA^T \in \mathbb{R}^{m\times m}$ ou $B=A^TA \mathbb{R}^{n\times n}$ selon le minimum entre m et n. En effet on a :
 $$A^TA = V \Sigma U^T U \Sigma V^T = V \Sigma²V^T$$
 $$AA^T = U \Sigma V^T V \Sigma U^T = U \Sigma²U^T$$
-Par conséquent, U (resp.V) , $\Sigma²=\Lambda = diag(\lambda_1,...,\lambda_r)$  sont les vecteurs propres et valeurs propres de la matrice B. Autrement dit les valeurs propres de B sont les carrés des valeurs singulières de A :   $\lambda_i²_{i \in {[1,r]}}$ = $\sigma_i²_{i \in {[1,r]}}$.  
+Par conséquent, U (resp.V) , $\Sigma²=\Lambda = diag(\lambda_1,...,\lambda_r)$  sont les vecteurs propres et valeurs propres de la matrice B. Autrement dit les valeurs propres de B sont les carrés des valeurs singulières de A :   $Sp(B) = \lambda_i²_{i \in {[1,r]}} = \sigma_i²_{i \in {[1,r]}}$.  
 On sait que B est une matrice symétrique alors on reduisant B sous sa forme Hessenberg on obtient une matrice triangulaire supérieur et symétrique donc cela revient a une matrice tridiagonal. Puis on applique la méthode QR à la matrice tridiagonale pour calculer les valeurs propres de B ainsi l'on obtiendra les valeurs singulieres de A.
 ```
 **Entrée :** A,matrice rectangulaire de taille (m,n)
