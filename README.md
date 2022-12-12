@@ -3,7 +3,7 @@ Projet de MPNA (CHPS 2022)
 Implementation de la methode de décomposition en valeur singulière (SVD) d'une matrice rectanglaire représenant un dataset quelconque.
 
 #Theorie sur la SVD
-Soit une matrice réelle A de dimension $m \time n$. La SVD de A donne :  
+Soit une matrice réelle A de dimension $m \times n$. La SVD de A donne :  
 #
 hdr  main.c  makefile  obj  perf.c  proto  README.md  src  test  
 
