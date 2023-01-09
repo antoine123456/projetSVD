@@ -113,8 +113,6 @@ double *singvals;
 double* M3 ;
 int main(int argc, char* argv[]){
 
-
-
   M3 =  malloc(sizeof(double)*5*6);
   GenRandMat2(5,6, M3);
 //  PrintMat(M,2,3);

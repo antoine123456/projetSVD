@@ -26,8 +26,7 @@ void  GenRandMat2(int m, int n, double* mat) {
 
           }
         }
-
-   return mat;
+//   return mat;
 }
 
 

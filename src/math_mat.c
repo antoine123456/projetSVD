@@ -1,6 +1,23 @@
 #include <math_mat.h>
 #include<math.h>
+#include<errno.h>
+#include<string.h>
 
+// Test de calloc ou de malloc
+/*
+#ifndef _TEST_MALLOC_
+#define _TEST_MALLOC_
+void test_malloc(double *buff){
+  int errornum;
+  if (buff == NULL) {
+      errornum = errno;
+      fprintf(stderr, "The Value of errno: %d\n", errno);
+      perror("Error message that is printed by perror");
+      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
+  }
+}
+#endif
+*/
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n) {
     double acc = 0;
@@ -107,14 +124,16 @@ void LinearCombination(double *v, double *u, int n, int s) {
 
 // B <- A * A^T
 double *get_AAt(double *A, int m, int n) {
-    double *B = NULL;
-    B =  malloc(m*m*sizeof(double*));
+    double *B =NULL;
+    B= (double*) malloc(m*m*sizeof(double));
+    test_malloc(B);
 
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
             double r = 0;
-            for (int k=0 ; k<n ; k++)
-                r += A[i*n + k] * A[j*n + k];
+            for (int k=0 ; k<n ; k++){
+                r += B[i*n + k] * B[j*n + k];
+              }
             B[i*m + j] = r;
         }
 
@@ -123,14 +142,16 @@ double *get_AAt(double *A, int m, int n) {
 
 // B <- A^T * A
 double *get_AtA(double *A, int m, int n) {
-    double *B = NULL;
-    B = (double *) malloc(n*n*sizeof(double*));
+    double *B =NULL  ;
+    B = (double*) malloc(n*n*sizeof(double));
+    test_malloc(B);
 
     for (int i=0; i<n ; i++)
         for (int j=0 ; j<n ; j++) {
             double r = 0;
-            for (int k=0 ; k<m ; k++)
+            for (int k=0 ; k<m ; k++){
                 r += A[k*n + i] * A[k*n + j];
+              }
             B[i*n + j] = r;
         }
 
