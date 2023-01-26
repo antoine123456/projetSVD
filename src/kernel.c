@@ -1,43 +1,6 @@
 #include "kernel.h"
 #include <stdio.h>
 #include <stdlib.h>
-void __repr__(double *A, int n, int m)
-{
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            if (A[i * n + j] < 0)
-            {
-                printf(" %f", A[i * n + j]);
-            }
-            else
-            {
-                printf("  %f", A[i * n + j]);
-            }
-        }
-        printf("\n");
-    }
-}
-void defMat(double *A)
-{
-    A[0] = 0;
-    A[1] = -9.0;
-    A[2] = -5.0;
-    A[3] = -5.0;
-    A[4] = 0;
-    A[5] = 9.0;
-    A[6] = 5.0;
-    A[7] = 5.0;
-    A[8] = 0;
-    A[9] = 0;
-    A[10] = 0;
-    A[11] = 0;
-    A[12] = 0;
-    A[13] = 0;
-    A[14] = 4.0;
-    A[15] = 4.0;
-}
 int euclidean_division(double a, double b)
 {
     if ((b == 0) | (a == 0))
@@ -57,6 +20,7 @@ int euclidean_division(double a, double b)
         r = r - b;
         q += 1;
     }
+    // printf("%f // %f = %d\n", a, r, sign * q);
     return sign * q;
 }
 double modulo(double x, double y)
@@ -119,12 +83,15 @@ void add2(double *A, int j1, double t, int j2, double *B, int nA, int nB)
 }
 double gcd(double a, double b)
 {
+    // printf("%f mod %f = ", a, b);
     double tmp;
     while (b != 0)
     {
         tmp = a;
         a = b;
+        // printf("%f mod %f = ", tmp, b);
         b = modulo(tmp, b);
+        // printf("%f\n", b);
     }
     return a;
 }
@@ -140,7 +107,10 @@ double gcdcol(double *A, int j, int n)
     double d = 0;
     for (int i = 0; i < n; i++)
     {
+        // printf("%f %f \n",d,A[i * n + j]);
+        // printf("gcd(%f,%f)=", d, A[i * n + j]);
         d = gcd(d, A[i * n + j]);
+        // printf("%f\n", d);
     }
     return d;
 }
@@ -158,9 +128,13 @@ void pivoter2(double *A, int l, int k, double *B, int nA, int nB)
     for (int j = k + 1; j < nA; j++)
     {
         double u = A[l * nA + j];
+        // printf("%f %f\n", t, u);
         double d = gcd(t, u);
+        // printf("%f rat\n", d);
         for (int i = 0; i < nA; i++)
         {
+            // printf("%f %f connasse\n", u, d);
+
             A[i * nA + j] = euclidean_division(t, d) * A[i * nA + j] - euclidean_division(u, d) * A[i * nA + k];
         }
         for (int i = 0; i < nB; i++)
@@ -225,9 +199,13 @@ imker_t imker(double *A, int n)
             break;
         if (res.j != k)
             echanger2(copieA, res.j, k, B, n, nB);
+
+        // printf("%d %d\n", res.i, k);
+        // __repr__(B,4,4);
         pivoter2(copieA, res.i, k, B, n, nB);
         k++;
     }
+    //   __repr__(B,4,4);
     for (int i = 0; i < n; i++)
     {
         normaliser_colonne(copieA, i, n);
@@ -321,12 +299,4 @@ noyau_t noyau(double *A, int n)
     ker.size = nulles.size;
     free(ret);
     return ker;
-}
-int main(int argc, char **argv)
-{
-    double *A = (double *)calloc(4 * 4, sizeof(double));
-    defMat(A);
-    noyau_t res = noyau(A, 4);
-    __repr__(res.vectors, 4, res.size);
-    return 0;
 }

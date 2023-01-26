@@ -24,8 +24,8 @@ typedef struct
     int size;
 } noyau_t;
 
-void __repr__(double *A, int n, int m);
-void defMat(double *A);
+// void __repr__(double *A, int n, int m);
+// void defMat(double *A);
 int euclidean_division(double a, double b);
 double modulo(double x, double y);
 void echanger2(double *A, int j1, int j2, double *B, int nA, int nB);
