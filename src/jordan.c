@@ -1,6 +1,14 @@
-#include "kernel.h"
+#include "kernel.h" // -> transpose
 #include "jordan.h"
 #include "utils.h" // TODO : replace par math_math
+#include "math_mat.h" // -> store_column, identity
+// TODO : opérations à binder avec Math
+// [x] : powMat
+// [x] : store_column
+// [x] : subMat
+// [x] : pdtMatVec
+// [x] : transpose
+// [x] : identity
 #include <stdlib.h>
 #include <stdio.h>
 /// @brief Calcul le produit matriciel entre une matrice et un vecteur, si le résultat est le vecteur nul, on est dans le noyau de la matrice
@@ -191,10 +199,3 @@ void freeJordan(Jordan_Bidiag_t j)
     free(j.J);
     free(j.P);
 }
-// TODO : opérations à binder avec Math
-// [ ] : powMat
-// [ ] : store_column
-// [ ] : subMat
-// [ ] : pdtMatVec
-// [ ] : transpose
-// [ ] : identity

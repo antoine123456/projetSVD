@@ -1,4 +1,5 @@
 #include "kernel.h"
+#include "math_mat.h" // -> transpose
 #include <stdio.h>
 #include <stdlib.h>
 int euclidean_division(double a, double b)
@@ -47,6 +48,20 @@ void echanger2(double *A, int j1, int j2, double *B, int nA, int nB)
         B[i * nB + j1] = B[i * nB + j2];
         B[i * nB + j2] = tmp;
     }
+}
+double *transpose(double *A, int n, int m)
+{
+    if (n == 0)
+        return NULL;
+    double *B = (double *)calloc(n * n, sizeof(double));
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < m; j++)
+        {
+            B[i * n + j] = A[i + j * n];
+        }
+    }
+    return B;
 }
 void mult2(double *A, int j, double t, double *B, int nA, int nB)
 {
@@ -218,20 +233,6 @@ imker_t imker(double *A, int n)
     ret.A = copieA;
     ret.B = B;
     return ret;
-}
-double *transpose(double *A, int n, int m)
-{
-    if (n == 0)
-        return NULL;
-    double *B = (double *)calloc(n * n, sizeof(double));
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < m; j++)
-        {
-            B[i * n + j] = A[i + j * n];
-        }
-    }
-    return B;
 }
 double *col(double *A, int j, int n)
 {

@@ -146,3 +146,72 @@ double *get_AtA(double *A, int m, int n) {
 
     return B;
 }
+
+// @jordan
+void store_column(double *Mat, double *V, int n, int deb, int taille)
+{
+    for (int j = deb; j < deb + n % taille + 1; j++)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            Mat[i * n + j] = V[j * n + i - (deb)*n];
+        }
+    }
+}
+// Id <- @jordan
+double *identity(int size)
+{
+    double *ret = (double *)malloc(size * size * sizeof(double));
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            if (j == i)
+            {
+                ret[i * size + j] = 1;
+            }
+        }
+    }
+    return ret;
+}
+// res <- A*v @jordan
+double * pdtMatVec(double *A, double *V, int n){
+    double * res = (double * )malloc(n * sizeof(double));
+    double tmpVar = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            tmpVar += A[i * n + j]*V[(i * n + j)%n];
+        }
+        res[i] = tmpVar;
+        tmpVar=0;
+    }
+    return res;
+}
+
+// res <- A^time @jordan
+double *powMat(double *A, int n, int time)
+{
+    double *res = (double *)malloc(n * n * sizeof(double));
+    for (int k = 0; k < n * n; k++)
+    {
+        res[k] = A[k];
+    }
+
+    for (int i = 0; i < time-1; i++)
+    {
+        res = DotProd(res, res, n);
+    }
+    return res;
+}
+// res <- A-w*B @jordan
+double *subMat(double *A, double *B, int w, int n)
+{
+    double *res = (double *)malloc(n * n * sizeof(double));
+    for (int k = 0; k < n * n; k++)
+    {
+        res[k] = A[k] - w*B[k];
+    }
+    return res;
+}

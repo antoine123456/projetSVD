@@ -58,3 +58,19 @@ double *get_AAt(double *A, int m, int n);
 
 // B <- A^T * A
 double *get_AtA(double *A, int m, int n);
+
+// B[:,deb:deb+taille] <- V
+void store_column(double *B, double *V, int n, int deb, int taille);
+
+// Id <-
+double *identity(int size);
+
+/* B <- A*v */
+double *pdtMatVec(double *A, double *V, int n);
+
+/* B <- A^time */
+double *powMat(double *A, int n, int time);
+
+/* B <- A-w*B */
+double *subMat(double *A, double *B, int w,int n);
+
