@@ -86,7 +86,7 @@ function [Q,H] = tri_householder(A)
     end
 endfunction
 
-function [Q,R] = Hessenberg(A)
+function [H,Q] = Hessenberg(A)
     [n,m] = size(A)
     H = A
     Q = eye(m,m)

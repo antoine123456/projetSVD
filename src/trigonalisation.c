@@ -29,117 +29,157 @@ double *sub_Copy_vec(double *dest, double *src, int a, int b){
   for(int i = a ; i<b ; i++){
     dest[i] = src[i];
   }
+  return dest;
 }
 
-// Hessenberg Reduction
-// A matrix which will apply the reduction
-//Q  Unitary matrix of Householder
-//H Hessenberg Matrix
-void Hess_Reduction(double *A, int n, double* H, double* Q){
-  double *u;  //vector as
-  double *v;
-  double *save;
-  double *save2;
-  double *save3;
-  int errornum;
+void get_symB(double * A, int m, int n, double* B, int *dimb){
+    assert(A);
+    assert(B);
+    assert(m>1);
+    assert(n>1);
+    assert(dimb);
 
-  double norm_u;
+    if(m>n) {
+        cblas_dgemm(CblasRowMajor, CblasTrans, CblasNoTrans, n, n, m, 1.0, A, m, A, m, 0.0, B,n);
+        if(*dimb != n)*dimb=n;
 
-  // Q = eye(n,n)
-  GenIdentityMatrix(n,Q); // Unitary matrix of Householder
+	}else{
+        cblas_dgemm(CblasRowMajor, CblasNoTrans, CblasTrans, m, m, n, 1.0, A, n, A, n, 0.0, B, m);
+        if(*dimb !=m )*dimb=m;
+     }
+}
 
-  // H =A
-  memcpy(H,A,n*n*sizeof(double*));  // Hessenberg Matrix
-  //PrintMat(H,n,n);
-  u = calloc(n,sizeof(double));
-  test_malloc(u);
 
-  v = calloc(n,sizeof(double));
-  test_malloc(v);
+void Hess_Reduction(double *A, int n ){
+  assert(n>2);
+  assert(A);
 
-  save = calloc(n,sizeof(double));
-  test_malloc(save);
+  // On itere sur chaque colonne de la matrice A
+  for (int k = 0; k < n - 1; k++) {
+    // Allocation de mémoire pour les vecteurs x, v et w
+    double* x = (double*) calloc(n,sizeof(double*));
+    double* v = (double*) calloc(n,sizeof(double*));
+    double* w = (double*) calloc(n,sizeof(double*));
+    double norm_x = 0;
+    double norm_v = 0;
 
-  save2 = calloc(n,sizeof(double));
-  test_malloc(save2);
-
-  save3 = calloc(n,sizeof(double));
-  test_malloc(save3);
-
-  for(int j = 0; j<n-2; j++){
-    // Find W  = I - 2vv'
-    //vecteurs intermediaire calculée
-
-    //vecteur u = H(j+1:n,j)
-    for (int i = j+1; i<n;i++){
-      u[i-(j+1)] = H[i*n+j];
-
+     // Calcul de x en extraisant les éléments de la colonne k du sous-bloc courant
+    for (int i = 0; i < n - k - 1; i++) {
+      x[i] = A[(k + i + 1) * n + k];
     }
-    //Calcul norme de u
-    norm_u = seq_d_norm(n,u);
 
-    // u(1) = u(1) + signe(u(1))*norm(u)
-    u[0] = u[0] + signe(u[0])*norm_u;
+    // Calcul de la norme de x
+    for (int i = 0; i < n - k - 1; i++) {
+      norm_x += x[i] * x[i];
+    }
+    norm_x = sqrt(norm_x);
 
-    //Calcul v = u/norm(u)
-    norm_u = seq_d_norm(n,u);
-    seq_d_axpy(n,1/norm_u,u,v);
+    // Calcul de v en ajoutant la valeur absolue de la norme de x à l'élément x[0]
+    v[0] = x[0] + copysign(norm_x, x[0]);
 
-    // --Find W = I - 2vv' to put zeros below (H(j+1,j))
-    //H(j+1:n,:) = H(j+1:n,:)-2*v*(v'*H(j+1:n,:))
-    // Compute save = v'*H(j+1:n,:)
-    init_vect(n,save);
-    for(int k = j+1 ; k<n ; k++){
-      for(int l=0; l<n; l++){
-        save[l] =  save[l]+v[k-(j+1)]*H[k*n+l];
+
+    // Copie des éléments de x dans
+    for (int i = 1; i < n - k - 1; i++) {
+      v[i] = x[i];
+    }
+
+    // Calcul de la norme de v
+    for (int i = 0; i < n - k - 1; i++) {
+      norm_v += v[i] * v[i];
+    }
+    norm_v = sqrt(norm_v);
+
+    // Normalisation de v
+    for (int i = 0; i < n - k - 1; i++) {
+      v[i] = v[i] / norm_v;
+    }
+
+
+   // Calcul de w en multipliant la matrice A(k+1:n,:) par v
+   for (int j = k + 1; j < n; j++) {
+      for (int i = 0; i < n; i++) {
+       w[i] = w[i] + A[j * n + i] * v[j - k - 1];
+      }
+   }
+
+    //printMat(w,n,1,"w");
+     // Mise à jour de la matrice A(k+1:n,:) en soustrayant 2 * w * v
+    for (int i = 0; i < n; i++) {
+      for (int j = k + 1; j < n; j++) {
+        A[j * n + i] = A[j * n + i] - 2 * w[i] * v[j - k - 1];
       }
     }
-
-    //Compute H(j+1:n,:) = H(j+1:n,:)-2*v(1:n-j,1)*save(1,1:n-j)
-    for(int p = j+1; p<n ; p++){
-      for(int q = 0; q<n ; q++){
-        H[p*n+q] = H[p*n+q] - 2.0*v[p-(j+1)]*save[q];
+    //reinitialisation de w
+    for(int i = 0; i<n; i++){
+      w[i]= 0;
+    }
+    // w = A(:,k+1:n) * v^t
+    for (int i = 0; i < n; i++) {
+      for (int j = k + 1; j < n; j++) {
+        w[i] = w[i] + A[i * n + j] * v[j - k - 1];
+       }
+    }
+    // Mise à jour de la matrice A(:,k+1:n) en soustrayant 2 * v * w
+    for (int i = 0; i < n; i++) {
+      for (int j = k + 1; j < n; j++) {
+       A[i * n + j] = A[i * n + j] -2 * v[j - k - 1] * w[i];
       }
     }
-
-    //  H(:,j+1:n) = H(:,j+1:n)-(H(:,j+1:n)*(2*v))* v'
-    init_vect(n,save2);
-    for(int k = j+1 ; k<n ; k++){
-      for(int l=0; l<n; l++){
-        save2[l] = save2[l]+v[k-(j+1)]*H[l*n+k];
-      }
-    }
-
-    //  H(:,j+1:n) = H(:,j+1:n)-save(1:n-j,1)* v'(1,1:n-j)
-    for(int p = j+1; p<n ; p++){
-      for(int q = 0; q<n ; q++){
-        H[q*n+p] = H[q*n+p] - 2.0*v[p-(j+1)]*save2[q];
-      //  printf("%lf=%lf-%lf,%lf\n",H[q*n+p] ,H[q*n+p] ,v[q],save[q]);
-      }
-    }
-
-    // Q(:,j+1:n) = Q(:,j+1:n)-(Q(:,j+1:n)*(2*v))* v
-    init_vect(n,save3);
-    for(int k = j+1 ; k<n ; k++){
-      for(int l=0; l<n; l++){
-        save3[l] =save3[l] +v[k-(j+1)]*Q[l*n+k];
-      }
-    }
-
-    for(int p = j+1; p<n ; p++){
-      for(int q = 0; q<n ; q++){
-        Q[q*n+p] = Q[q*n+p] - 2.0*v[p-(j+1)]*save3[q];
-      }
-    }
-
-
+    free(w);
+    free(v);
+    free(x);
   }
+}
 
+void Hess_Reduction2(double *A,int n) {
+  assert(n>=2);
+  assert(A);
 
-  free(u);
-  free(v);
-  free(save);
-  free(save2);
-  free(save3);
+  // On itere sur chaque colonne de la matrice A
+  for (int k = 0; k < n - 2; ++k) {
+    // Allocation mémoire des vecteurs de calcul intemédiaires
+    double* x = (double*) calloc(n,sizeof(double*));
+    double* v = (double*) calloc(n,sizeof(double*));
+    double *w = (double*) calloc(n,sizeof(double*));
+    //Norme des vecteurs intermédiaires
+    double norm_v =0.0;
+    double norm_x=0.0;
 
+    //Copie du sous-vecteur colonne de x <- A(k+1:n,k) de taille n-k-1
+    cblas_dcopy(n - k - 1, &A[(k ) * n + k+1], 1, x, 1);
+
+    norm_x = cblas_dnrm2(n - k - 1, x, 1); //Calcul de la norme 2 euclidienne de x
+
+    x[0] = x[0] + copysign(norm_x, x[0]); //Modification du premier element
+
+    cblas_dcopy(n - k - 1, x, 1, v, 1); //Copy du x modifié dans le v ,vecteur de taille n-k-1 x 1
+
+    norm_v = cblas_dnrm2(n - k - 1, v, 1); //Calcul de la norme 2 euclidienne de v
+
+    cblas_dscal(n - k - 1, 1.0 / norm_v, v, 1); //Normalisation de v
+
+    //Multiplication matriciel : A(k+1:n,:) <-  A(k+1:n,:) - 2*v*v^t* A(k+1:n,:)
+    // w <- v^t*A(k+1:n,:) avec w 1 x n
+    cblas_dgemm(CblasRowMajor, CblasNoTrans,CblasNoTrans, 1,n,n-k-1,1.0,v,n-k-1,&A[(k+1)*n],n,0,w,n);
+    // A(k+1:n,: ) <- v*w
+    cblas_dger(CblasRowMajor,n-k-1,n,-2.0,v,1,w,1,&A[(k+1)*n],n);
+
+    // Multiplication matriciel A(:,K+1:n) <- A(:,K+1:n) - 2 *A(:,K+1:n)*v*v^t
+    //reinitialisation de w
+    for(int i = 0; i<n; i++){
+      w[i]= 0;
+    }
+    // w = A(:,k+1:n) * v^t
+    for (int i = 0; i < n; i++) {
+       w[i] = w[i] + cblas_ddot(n-k-1,&A[i*n+k+1],1,v,1);
+    }
+    // Mise a jour par  lignge
+    for (int i = 0; i < n; i++) {
+      cblas_daxpy(n-k-1,-2*w[i],v,1,&A[i*n+k+1],1);
+    }
+
+    free(w);
+    free(v);
+    free(x);
+  }
 }

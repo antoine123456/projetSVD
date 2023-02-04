@@ -1,4 +1,6 @@
 #include <gen_mat.h>
+#include <errno.h>
+#include<string.h>
 
 /* Generate random matrix of dimensions n*n */
 void  GenRandMat(int n,double* mat) {
@@ -80,4 +82,22 @@ double *GenIdentityMatrix(int n, double *Eye){
       Eye[i*n+i] = 1.0;
     }
     return Eye;
+}
+void test_malloc(double *buff){
+  int errornum;
+  if (buff == NULL) {
+      errornum = errno;
+      fprintf(stderr, "The Value of errno: %d\n", errno);
+      perror("Error message that is printed by perror");
+      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
+  }
+}
+void test_free(double *buff){
+  int errornum;
+  if (buff == NULL) {
+      errornum = errno;
+      fprintf(stderr, "The Value of errno: %d\n", errno);
+      perror("Error message that is printed by perror");
+      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
+  }
 }

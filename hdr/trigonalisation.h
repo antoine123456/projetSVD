@@ -1,10 +1,12 @@
 #ifndef TRIGO_H
 #define TRIGO_H
-#include <math.h>
-#include <stdlib.h>
+#include<stdlib.h>
 #include<stdio.h>
-#include <math_mat.h>
-#include <lapacke.h>
+#include<cblas.h>
+#include<string.h>
+#include<lapack.h>
+#include<math.h>
+#include<assert.h>
 
 
 /*************
@@ -25,8 +27,9 @@ function [H,Q] = hessred(A)
     end
 endfunction
 **************/
-
-void Hess_Reduction( double *A, int n, double *H, double *Q);
+void get_symB(double * A, int m, int n, double* B, int *dimb);
+void Hess_Reduction( double *A, int n);
+void Hess_Reduction2( double *A, int n);
 double signe(double scalar);
 double *sub_Copy(double *dest, double *src,int n, int a,int b );
 

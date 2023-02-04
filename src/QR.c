@@ -40,7 +40,7 @@ eigen_t QR_method(double *A, int n) {
     for (int k=0 ; k<NITER ; k++) {
         // QR decomposition
         GramSchmidtMod(&QR, A, n);
-        
+
         // Akp1 calcul
         MatMul(A, QR.R, QR.Q, n);
 
@@ -53,6 +53,40 @@ eigen_t QR_method(double *A, int n) {
 
     for (int i=0 ; i<n ; i++)
         eigen.values[i] = A[i*n + i];
+    eigen.vectors = QR.Q;
+
+    free(QR.R);
+
+    return eigen;
+}
+
+/* QR iteration method :
+ * A modified such that its' trangular sup
+ * elements are its eigenvalues */
+eigen_t my_QR_method(double *A, int n) {
+    QR_t QR;
+    QR.Q = (double *) malloc(sizeof(double )* n*n);
+    QR.R = (double *) malloc(sizeof(double )* n*n);
+
+    eigen_t eigen;
+    eigen.values  = malloc(sizeof(double) * n);
+
+    for (int k=0 ; k<NITER ; k++) {
+        // QR decomposition
+        GramSchmidtMod(&QR, A, n);
+
+        // Akp1 calcul
+        MatMul(A, QR.R, QR.Q, n);
+
+        // Error check
+        double err_max = GershgorinTest(A, n);
+        if (err_max < EPS)
+            break;
+
+    }
+
+    for (int i=0 ; i<n ; i++)
+        eigen.values[i] = QR.R[i*n + i];
     eigen.vectors = QR.Q;
 
     free(QR.R);
@@ -85,8 +119,9 @@ eigen_t QR_method_Tridiag(double *A, int n) {
     }
 
 
-    for (int i=0 ; i<n ; i++)
-        eigen.values[i] = A[i*n + i];
+    for (int i=0 ; i<n ; i++){
+      eigen.values[i] = A[i*n + i];
+    }
     eigen.vectors = QR.Q;
 
     free(QR.R);

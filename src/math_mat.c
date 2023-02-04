@@ -2,22 +2,8 @@
 #include<math.h>
 #include<errno.h>
 #include<string.h>
+#include"gen_mat.h"
 
-// Test de calloc ou de malloc
-/*
-#ifndef _TEST_MALLOC_
-#define _TEST_MALLOC_
-void test_malloc(double *buff){
-  int errornum;
-  if (buff == NULL) {
-      errornum = errno;
-      fprintf(stderr, "The Value of errno: %d\n", errno);
-      perror("Error message that is printed by perror");
-      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
-  }
-}
-#endif
-*/
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n) {
     double acc = 0;
@@ -124,28 +110,64 @@ void LinearCombination(double *v, double *u, int n, int s) {
 
 // B <- A * A^T
 double *get_AAt(double *A, int m, int n) {
-    double *B =NULL;
-    B= (double*) malloc(m*m*sizeof(double));
-    test_malloc(B);
+      //double *B =NULL  ;
 
+// PrintVec(A,m/2);
+
+     double *B= (double*) malloc(m*m*sizeof(double));
+
+    test_malloc(B);
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
             double r = 0;
             for (int k=0 ; k<n ; k++){
-                r += B[i*n + k] * B[j*n + k];
+                r += A[i*n + k] * A[j*n + k];
               }
             B[i*m + j] = r;
         }
 
     return B;
-}
+ }
 
 // B <- A^T * A
 double *get_AtA(double *A, int m, int n) {
-    double *B =NULL  ;
-    B = (double*) malloc(n*n*sizeof(double));
-    test_malloc(B);
 
+    double *B = (double*) malloc(n*n*sizeof(double));
+
+    for (int i=0; i<n ; i++)
+        for (int j=0 ; j<n ; j++) {
+            double r = 0;
+            for (int k=0 ; k<m ; k++){
+                r += A[k*n + i] * A[k*n + j];
+              }
+            B[i*n + j] = r;
+        }
+
+    return B;
+}
+
+// B <- A * A^T version 2
+double *B_get_AAt(double *B,double *A, int m, int n) {
+      //double *B =NULL  ;
+  //   double *B= (double*) malloc(m*m*sizeof(double));
+    test_malloc(B);
+    for (int i=0; i<m ; i++)
+        for (int j=0 ; j<m ; j++) {
+            double r = 0;
+            for (int k=0 ; k<n ; k++){
+                r += A[i*n + k] * A[j*n + k];
+              }
+            B[i*m + j] = r;
+        }
+
+    return B;
+ }
+
+// B <- A^T * A version 2
+double *B_get_AtA(double *B, double *A, int m, int n) {
+
+  //  double *B = (double*) malloc(n*n*sizeof(double));
+    test_malloc(B);
     for (int i=0; i<n ; i++)
         for (int j=0 ; j<n ; j++) {
             double r = 0;
@@ -182,7 +204,7 @@ double Trace_Mat(int dim, double *A){
 
 // sqrt(Trace(AAt))
 double norme_Mat(int dim, double *A){
-  double norme = 0.0;
+  //double norme = 0.0;
   double* B;
   B= get_AAt(A,dim,dim);
   return sqrt(Trace_Mat(dim,B));

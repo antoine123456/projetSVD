@@ -21,3 +21,9 @@ double *GenInvertibleMatrix9(int n, double a, double b);
 
 /* Generate a identity matrix of dimnsion n*m*/
 double *GenIdentityMatrix(int n,double *Q);
+
+/*Test les malloc*/
+void test_malloc(double *buff);
+
+/*test les pointeurs avant free*/
+void test_free(double *buff);

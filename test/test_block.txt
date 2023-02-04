@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     double *givens_mat = givens(n,n);
     double *givens_ev = givens_eigenvalues(n);
     Eigen_to_Singular(givens_ev, n);
-    singvals = SVD_1_Blocks(givens_mat, n, n);
+    singvals = SVD_blocks(givens_mat, n, n);
     if(!Test_Eigenvalues(givens_ev, singvals, eps, n)) {
         Print_Error_Mat("SVD_blocks", "Givens");
         nerr++;
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[])
     double *aegerter_mat = aegerter(n);
     double *aegerter_ev = aegerter_eigenvalues(n);
     Eigen_to_Singular(aegerter_ev, n);
-   singvals = SVD_1_Blocks(aegerter_mat, n, n);
+   singvals = SVD_blocks(aegerter_mat, n, n);
     if(!Test_Eigenvalues(aegerter_ev, singvals, eps, n)) {
         Print_Error_Mat("SVD_blocks", "Aegerter");
         nerr++;
