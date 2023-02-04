@@ -1,21 +1,34 @@
 #include <gen_mat.h>
+#include <errno.h>
+#include<string.h>
 
 /* Generate random matrix of dimensions n*n */
-double *GenRandMat(int n) {
-    double *mat = (double *) malloc(sizeof(double) * n*n);
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
+void  GenRandMat(int n,double* mat) {
+  //  mat = (double *) malloc(sizeof(double) * n*n);
+    for (int i = 0; i < n; i++){
+        for (int j = 0; j < n; j++){
             mat[i*n + j] = (double) (1 + rand() % 100);
-    return mat;
+            if(i == j){
+             mat[i*n + j] = 10.0*mat[i*n + j];
+           }
+         }
+       }
+   //return mat;
 }
 
 /* Generate random matrix of dimensions m*n */
-double *GenRandMat2(int m, int n) {
-    double *mat = (double *) malloc(sizeof(double) * m*n);
-    for (int i = 0; i < m; i++)
-        for (int j = 0; j < n; j++)
+void  GenRandMat2(int m, int n, double* mat) {
+    //mat = (double *) malloc(sizeof(double) * m*n);
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
             mat[i*n + j] = (double) (1 + rand() % 100);
-    return mat;
+            if(i == j){
+             mat[i*n + j] = 10.0*mat[i*n + j];
+           }
+
+          }
+        }
+//   return mat;
 }
 
 
@@ -69,4 +82,22 @@ double *GenIdentityMatrix(int n, double *Eye){
       Eye[i*n+i] = 1.0;
     }
     return Eye;
+}
+void test_malloc(double *buff){
+  int errornum;
+  if (buff == NULL) {
+      errornum = errno;
+      fprintf(stderr, "The Value of errno: %d\n", errno);
+      perror("Error message that is printed by perror");
+      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
+  }
+}
+void test_free(double *buff){
+  int errornum;
+  if (buff == NULL) {
+      errornum = errno;
+      fprintf(stderr, "The Value of errno: %d\n", errno);
+      perror("Error message that is printed by perror");
+      fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
+  }
 }

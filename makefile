@@ -5,7 +5,14 @@
 
 CC=mpicc
 CFLAGS=-g -Wall
-LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas
+#<<<<<<< hessenberg
+#<<<<<<< HEAD
+#=======
+LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas -llapack
+#>>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
+#=======
+#LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas
+#>>>>>>> main
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))

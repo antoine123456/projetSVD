@@ -6,9 +6,9 @@
 #include <stdlib.h>
 
 /* Generate random matrix of dimensions n*n */
-double *GenRandMat(int n);
+void GenRandMat(int n,double* mat);
 /* Generate random matrix of dimensions m*n */
-double *GenRandMat2(int m, int n);
+void GenRandMat2(int m, int n, double *mat);
 
 /* Generate random vector of length n */
 double *GenRandVec(int n);
@@ -21,3 +21,9 @@ double *GenInvertibleMatrix9(int n, double a, double b);
 
 /* Generate a identity matrix of dimnsion n*m*/
 double *GenIdentityMatrix(int n,double *Q);
+
+/*Test les malloc*/
+void test_malloc(double *buff);
+
+/*test les pointeurs avant free*/
+void test_free(double *buff);

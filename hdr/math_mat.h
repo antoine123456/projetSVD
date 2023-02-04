@@ -9,6 +9,8 @@
 
 #include <cblas.h>
 
+
+
 /* Returns the DotProd of vectors x and y of length n*/
 double DotProd(double *x, double *y, int n);
 
@@ -70,3 +72,8 @@ double Trace_Mat(int dim, double *A);
 
 // sqrt(Trace(AAt))
 double norme_Mat(int dim, double *A);
+
+double *B_get_AtA(double *B, double *A, int m, int n);
+
+
+double *B_get_AAt(double *B, double *A, int m, int n);
