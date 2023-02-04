@@ -52,7 +52,7 @@ static void Hess_Reduction_test_Q_mat(void **state){
       Hess_Reduction(A, 3, H_test,P_test);
 
 
-      double myzeros = 0.0;
+      // double myzeros = 0.0;
 
       C_aAplusbB( 3,verifyM1,1.0,P_sol, -1.0,P_test);
       res1= norme_Mat(3, verifyM1);
@@ -77,7 +77,7 @@ static void Hess_Reduction_test_H_mat(void **state){
 
       Hess_Reduction(A, 3, H_test,P_test);
 
-      double myzeros = 0.0;
+      // double myzeros = 0.0;
 
       C_aAplusbB( 3,verifyM2,1.0,H_sol, -1.0,H_test);
       res2= norme_Mat(3, verifyM2);
@@ -87,7 +87,7 @@ static void Hess_Reduction_test_H_mat(void **state){
 static void SVD_Hessenberg_test(void **state){
   double *singvals;
   singvals = SVD_Hessenberg(M,2 ,3 ) ;
-  printf("%lf , %lf\n", sqrt(singvals[0]),sqrt(singvals[1]));
+  // printf("%lf , %lf\n", sqrt(singvals[0]),sqrt(singvals[1]));
   double res1= sqrt(singvals[0]) -5;
   double res2= sqrt(singvals[1]) -3;
   assert_true((res1< 0.00001));
@@ -97,7 +97,7 @@ static void SVD_Hessenberg_test(void **state){
 int main(int argc, char* argv[]){
   double *singvals;
   singvals = SVD_Hessenberg(M,2 ,3 ) ;
-  PrintVec(singvals,6);
+  // PrintVec(singvals,6);
 
   const struct CMUnitTest tests[] = {
       cmocka_unit_test(Hess_Reduction_test_Q_mat),cmocka_unit_test(Hess_Reduction_test_H_mat),

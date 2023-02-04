@@ -159,7 +159,7 @@ double Trace_Mat(int dim, double *A){
 
 // sqrt(Trace(AAt))
 double norme_Mat(int dim, double *A){
-  double norme = 0.0;
+  // double norme = 0.0;
   double* B;
   B= get_AAt(A,dim,dim);
   return sqrt(Trace_Mat(dim,B));

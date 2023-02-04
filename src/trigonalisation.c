@@ -10,7 +10,7 @@ double signe( double scalar){
     return 1.0;
   }
 }
-double *sub_Copy_vec(double *dest, double *src, int a, int b){
+void sub_Copy_vec(double *dest, double *src, int a, int b){
   for(int i = a ; i<b ; i++){
     dest[i] = src[i];
   }

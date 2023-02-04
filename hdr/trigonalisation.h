@@ -28,6 +28,6 @@ endfunction
 
 void Hess_Reduction( double *A, int n, double *H, double *Q);
 double signe(double scalar);
-double *sub_Copy(double *dest, double *src,int n, int a,int b );
+void sub_Copy(double *dest, double *src,int n, int a,int b );
 
 #endif
