@@ -38,6 +38,7 @@ double V[] = { 1.0/sqrt(2.0), -1/(3.0*sqrt(2.0)), -2.0/3.0,
               1.0/sqrt(2.0), 1/(3.0*sqrt(2.0)), 2.0/3.0,
               0.0 ,         2.0*sqrt(2)/3.0,    1.0/3.0};
 
+//<<<<<<< hessenberg
 double M1[] = {11,-5,4,6,
               -2,10,5,7,
               3,-6 ,7, 9};
@@ -89,6 +90,7 @@ static void Hessenberg_Reduction_Test(void **state){
     residual =cblas_dnrm2(9,H_sol,1);
     assert_true((residual < 1e-6)==0);
     free(Atest);
+
 }
 static void Hessenberg_Reduction2_Test(void **state){
 
@@ -109,9 +111,14 @@ static void Hessenberg_Reduction2_Test(void **state){
 
 static void SVD_Hessenberg_test(void **state){
   double *singvals;
+//<<<<<<< hessenberg
   singvals = SVD_Hessenberg(M ,2,3) ;
 //  printf("eigenvalues = 5,3 \n");
 //  printf("%lf , %lf\n", sqrt(singvals[0]),sqrt(singvals[1]));
+//=======
+  //singvals = SVD_Hessenberg(M,2 ,3 ) ;
+  // printf("%lf , %lf\n", sqrt(singvals[0]),sqrt(singvals[1]));
+//>>>>>>> main
   double res1= sqrt(singvals[0]) -5;
   double res2= sqrt(singvals[1]) -3;
   assert_true((res1< 0.00001));
@@ -157,6 +164,7 @@ double* M3 ;
 int main(int argc, char* argv[]){
 /*
   double *singvals;
+//<<<<<<< hessenberg
   double *s = (double*) calloc(3,sizeof(double*));
   double *work = (double*) calloc(3*5,sizeof(double*));
   singvals = SVD_Hessenberg(M2 ,4,3) ;
@@ -173,5 +181,11 @@ int main(int argc, char* argv[]){
 const struct CMUnitTest tests[] = {cmocka_unit_test(Hessenberg_Reduction_Test),cmocka_unit_test(Hessenberg_Reduction2_Test),
                         cmocka_unit_test(get_symB_Test),cmocka_unit_test(SVD_Hessenberg_test),cmocka_unit_test(SVD_Hessenberg_test2)};
   //return EXIT_SUCCESS;
+//=======
+//  singvals = SVD_Hessenberg(M,2 ,3 ) ;
+  // PrintVec(singvals,6);
+
+
+//>>>>>>> main
   return cmocka_run_group_tests(tests, NULL, NULL);
 }
