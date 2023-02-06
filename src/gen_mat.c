@@ -83,7 +83,8 @@ double *GenIdentityMatrix(int n, double *Eye){
     }
     return Eye;
 }
-void test_malloc(double *buff){
+
+int my_test_malloc(double *buff){
   int errornum;
   if (buff == NULL) {
       errornum = errno;
@@ -91,8 +92,10 @@ void test_malloc(double *buff){
       perror("Error message that is printed by perror");
       fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
   }
+  return 0;
 }
-void test_free(double *buff){
+
+int my_test_free(double *buff){
   int errornum;
   if (buff == NULL) {
       errornum = errno;
@@ -100,4 +103,5 @@ void test_free(double *buff){
       perror("Error message that is printed by perror");
       fprintf(stderr, "Error message for allocation of B : %s\n", strerror( errornum ));
   }
+  return 1;
 }

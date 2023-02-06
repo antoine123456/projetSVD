@@ -1,3 +1,5 @@
+#ifndef MATH_MAT_H
+#define MATH_MAT_H
 /* Contains function to compute mathematical operations on matrices */
 #pragma once
 
@@ -6,6 +8,7 @@
 
 #include "my_seq_blas1.h"
 #include "my_seq_blas2.h"
+#include "io_matrix.h"
 
 #include <cblas.h>
 
@@ -77,3 +80,5 @@ double *B_get_AtA(double *B, double *A, int m, int n);
 
 
 double *B_get_AAt(double *B, double *A, int m, int n);
+
+#endif

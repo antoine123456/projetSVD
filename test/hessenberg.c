@@ -5,7 +5,7 @@
 #include<stddef.h>
 #include<setjmp.h>
 #include<cmocka.h>
-#include"trigonalisation.h"
+#include"hessenberg.h"
 #include"SVD.h"
 #include<math.h>
 #include "QR.h"
@@ -14,7 +14,9 @@
 #include"io_matrix.h"
 #include "test_mat.h"
 #include "test_utils.h"
-
+#include "io_matrix.h"
+#include "gen_mat.h"
+#include <clapack.h>
     // Matrix A,P,H as : A = P*H*P'
 double A1[] = {5.4 , -4.0, 7.7,
     3.5, -0.7, 2.8,
@@ -125,9 +127,9 @@ static void SVD_Hessenberg_test2(void **state){
   double res1;
 
   //printf("%lf , %lf, %lf\n", sqrt(fabs(singvals[0])),sqrt(fabs(singvals[1])),sqrt(fabs(singvals[2])));
-  singvals[0] = sqrt(fabs(singvals[0]));
-  singvals[1]= sqrt(fabs(singvals[1]));
-  singvals[2]= sqrt(fabs(singvals[2]));
+  //singvals[0] = sqrt(fabs(singvals[0]));
+  //singvals[1]= sqrt(fabs(singvals[1]));
+  //singvals[2]= sqrt(fabs(singvals[2]));
   //printf("%lf , %lf, %lf\n", fabs(singvals[0]),fabs(singvals[1]),fabs(singvals[2]));
   cblas_daxpy(3,-1.0,svsol,1,singvals,1);
   //printf("%lf , %lf, %lf\n", fabs(singvals[0]),fabs(singvals[1]),fabs(singvals[2]));
@@ -154,6 +156,52 @@ static void SVD_Hessenberg_test3(void **state){
 */
 double *singvals;
 double* M3 ;
+
+
+
+void SingularValueDecomposition(int m,     // number of rows in matrix
+                                int n,     // number of columns in matrix
+                                int lda,   // leading dimension of matrix
+                                double *a, double *buff) // pointer to top-left corner
+{
+    // Setup a buffer to hold the singular values:
+    int numberOfSingularValues = m < n ? m : n;
+    double *s = malloc(numberOfSingularValues * sizeof s[0]);
+
+    // Setup buffers to hold the matrices U and Vt:
+    double *u = malloc(m*m * sizeof u[0]);
+    double *vt = malloc(n*n * sizeof vt[0]);
+
+    // Workspace and status variables:
+    double workSize;
+    double *work = &workSize;
+    int lwork = -1;
+    int *iwork = malloc(8 * numberOfSingularValues * sizeof iwork[0]);
+    int info = 0;
+
+    // Call dgesdd_ with lwork = -1 to query optimal workspace size:
+    dgesdd_("A", &m, &n, a, &lda, s, u, &m, vt, &n, work, &lwork, iwork, &info);
+    if (info) // handle error conditions here
+
+    // Optimal workspace size is returned in work[0].
+    lwork = workSize;
+    work = malloc(lwork * sizeof work[0]);
+
+    // Call dgesdd_ to do the actual computation:
+    dgesdd_("A", &m, &n, a, &lda, s, u, &m, vt, &n, work, &lwork, iwork, &info);
+    if (info) // handle error conditions here
+
+    // Cleanup workspace:
+    free(work);
+    free(iwork);
+
+    // do something useful with U, S, Vt ...
+    cblas_dcopy(numberOfSingularValues,s,1,buff,1);
+    // and then clean them up too:
+    free(s);
+    free(u);
+    free(vt);
+}
 int main(int argc, char* argv[]){
 /*
   double *singvals;
@@ -169,8 +217,24 @@ int main(int argc, char* argv[]){
   singvals = SVD_Hessenberg(M1 ,3,4) ;
   printf("eigenvalues  \n");
   printf("%lf , %lf, %lf\n", sqrt(fabs(singvals[0])),sqrt(fabs(singvals[1])),sqrt(fabs(singvals[2])));*/
+  for (int i =1 ;i<5;i++){
+    double* s_v = (double*) calloc(i*3,sizeof(double*));
+    //double* s_v2 = (double*) calloc(i*3,sizeof(double*));
+    double* rand_mat = (double*) calloc((i*3)*(i*5),sizeof(double*));
+    GenRandMat2(i*3,i*5,rand_mat);
+    s_v = SVD_Hessenberg(rand_mat,i*3,i*5);
+    //SingularValueDecomposition(i*3,i*5,i*3,rand_mat,s_v2);
+    printf("singular values pour n = %d\n",i*3);
+    for(int j = 0; j<i*3;j++){
+      //s_v[j] = sqrt(fabs(s_v[j]));
+      printf("s_v[%d]=%lf\n",j,s_v[j]);
+      //printf("s_v2[%d]=%lf\n",j,s_v2[j]);
 
-const struct CMUnitTest tests[] = {cmocka_unit_test(Hessenberg_Reduction_Test),cmocka_unit_test(Hessenberg_Reduction2_Test),
+    }
+    free(rand_mat);
+  }
+
+  const struct CMUnitTest tests[] = {cmocka_unit_test(Hessenberg_Reduction_Test),cmocka_unit_test(Hessenberg_Reduction2_Test),
                         cmocka_unit_test(get_symB_Test),cmocka_unit_test(SVD_Hessenberg_test),cmocka_unit_test(SVD_Hessenberg_test2)};
   //return EXIT_SUCCESS;
   return cmocka_run_group_tests(tests, NULL, NULL);

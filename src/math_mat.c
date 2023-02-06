@@ -116,7 +116,7 @@ double *get_AAt(double *A, int m, int n) {
 
      double *B= (double*) malloc(m*m*sizeof(double));
 
-    test_malloc(B);
+    my_test_malloc(B);
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
             double r = 0;
@@ -150,7 +150,7 @@ double *get_AtA(double *A, int m, int n) {
 double *B_get_AAt(double *B,double *A, int m, int n) {
       //double *B =NULL  ;
   //   double *B= (double*) malloc(m*m*sizeof(double));
-    test_malloc(B);
+    my_test_malloc(B);
     for (int i=0; i<m ; i++)
         for (int j=0 ; j<m ; j++) {
             double r = 0;
@@ -167,7 +167,7 @@ double *B_get_AAt(double *B,double *A, int m, int n) {
 double *B_get_AtA(double *B, double *A, int m, int n) {
 
   //  double *B = (double*) malloc(n*n*sizeof(double));
-    test_malloc(B);
+    my_test_malloc(B);
     for (int i=0; i<n ; i++)
         for (int j=0 ; j<n ; j++) {
             double r = 0;

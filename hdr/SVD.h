@@ -1,3 +1,5 @@
+#ifndef _SVD_H
+#define _SVD_H
 #pragma once
 
 #include <math.h>
@@ -14,3 +16,5 @@ double* SVD_3(double *A, int m, int n);
 
 // Call Hess_Reduction to transform matrix into hessenberg form then
 double* SVD_Hessenberg(double *A, int m, int n);
+
+#endif

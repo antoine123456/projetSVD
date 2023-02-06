@@ -1,5 +1,5 @@
 #include <SVD.h>
-#include "trigonalisation.h"
+#include "hessenberg.h"
 #include <io_matrix.h>
 #include <string.h>
 #include<omp.h>
@@ -85,13 +85,16 @@ double* SVD_Hessenberg(double *A, int m, int n) {
       dimB = m;
     }
     double *B = (double*) malloc(dimB*dimB*sizeof(double));
-    test_malloc(B);
+    my_test_malloc(B);
 
     get_symB(A,m,n,B,&dimB);
 
-    Hess_Reduction2(B, dimB);
+    Hess_Reduction(B, dimB);
 
     eigen_t Beigens = QR_method_Tridiag(B, dimB);
+    for(int i=0; i<dimB; i++){
+      Beigens.values[i] = sqrt(fabs(Beigens.values[i]));
+    }
     free(B);
 
     free(Beigens.vectors);

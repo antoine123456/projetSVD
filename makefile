@@ -4,7 +4,7 @@
 # `make clean` clean all executables generated
 
 CC=gcc
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall -pg
 #<<<<<<< HEAD
 #=======
 LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas -llapack

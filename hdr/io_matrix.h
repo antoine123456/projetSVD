@@ -1,5 +1,6 @@
+#ifndef IO_MATRIX_H
+#define IO_MATRIX_H
 /* Contains IO utility functions */
-
 #pragma once
 
 #include <stdio.h>
@@ -16,3 +17,4 @@ void PrintMat(double* mat, int n, int m);
 
 /* Display in terminal the vector "x" of size "n" */
 void PrintVec(double *x, int n);
+#endif
