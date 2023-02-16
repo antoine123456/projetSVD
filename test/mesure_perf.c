@@ -41,19 +41,19 @@ int main(int argc, char* argv[]){
   float t_cpu;
 
   fprintf(file_pointer,"m\t;n\t;temps\n");
-  for (int i =10 ;i<12;i++){
+  for (int i =1 ;i<3;i++){
     double* s_v = (double*) calloc(i*3,sizeof(double*));
     //double* s_v2 = (double*) calloc(i*3,sizeof(double*));
-    double* rand_mat = (double*) calloc((i*3)*(i*5),sizeof(double*));
-    GenRandMat2(i*3,i*5,rand_mat);
+    double* rand_mat = (double*) calloc((i*3)*(i*4),sizeof(double*));
+    GenRandMat2(i*3,i*4,rand_mat);
     t_init = clock();
-    for(int k = 0; k<100; k++){
-      s_v = SVD_Hessenberg(rand_mat,i*3,i*5);
+    for(int k = 0; k<5; k++){
+      s_v = SVD_Hessenberg(rand_mat,i*3,i*4);
       //printf("%lf,%lf,%lf,%lf",s_v[0],s_v[1],s_v[2],s_v[3]);
     }
     t_final = clock();
     t_cpu = 0.001*(t_final - t_init)*1e-6;
-    fprintf(file_pointer,"%d;\t%d;\t;%f\n",i*3,i*5,t_cpu);
+    fprintf(file_pointer,"%d;\t%d;\t;%f\n",i*3,i*4,t_cpu);
     //SingularValueDecomposition(i*3,i*5,i*3,rand_mat,s_v2);
     printf("singular values pour n = %d\n",i*3);
     //for(int j = 0; j<i*3;j++){

@@ -31,6 +31,6 @@ void get_symB(double * A, int m, int n, double* B, int *dimb);
 void Hess_Reduction( double *A, int n);
 void Hess_Reduction2( double *A, int n);
 double signe(double scalar);
-double *sub_Copy(double *dest, double *src,int n, int a,int b );
+void sub_Copy(double *dest, double *src,int n, int a,int b );
 
 #endif

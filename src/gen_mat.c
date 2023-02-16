@@ -9,7 +9,7 @@ void  GenRandMat(int n,double* mat) {
         for (int j = 0; j < n; j++){
             mat[i*n + j] = (double) (1 + rand() % 100);
             if(i == j){
-             mat[i*n + j] = 10.0*mat[i*n + j];
+             mat[i*n + j] = (double) 10.0 * mat[i*n + j];
            }
          }
        }
@@ -21,17 +21,29 @@ void  GenRandMat2(int m, int n, double* mat) {
     //mat = (double *) malloc(sizeof(double) * m*n);
     for (int i = 0; i < m; i++){
         for (int j = 0; j < n; j++){
-            mat[i*n + j] = (double) (1 + rand() % 100);
+            mat[i*n + j] = (double) (1 + rand() % 10);
             if(i == j){
-             mat[i*n + j] = 10.0*mat[i*n + j];
+             mat[i*n + j] = (double) 5.0*mat[i*n + j];
+           }
+
+          }
+        }
+//   return mat;
+}/*
+// Generate random matrix of dimensions m*n
+void  GenRandMat2(int m, int n, double* mat) {
+    //mat = (double *) malloc(sizeof(double) * m*n);
+    for (int i = 0; i < m; i++){
+        for (int j = 0; j < n; j++){
+            mat[i*n + j] = (double) rand() / (double) RAND_MAX;
+            if(i == j){
+             mat[i*n + j] = (double) 10.0*mat[i*n + j];
            }
 
           }
         }
 //   return mat;
 }
-
-
 /* Generate random vector of length n */
 double *GenRandVec(int n) {
     double *vec = (double *) malloc(sizeof(double) * n);

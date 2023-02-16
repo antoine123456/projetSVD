@@ -134,7 +134,7 @@ void Hess_Reduction(double *A, int n ){
   }
 }
 
-void Hess_Reduction2(double *A,int n) {
+void Hess_Reduction2(double *A,int n,double* U,double* V) {
   assert(n>=2);
   assert(A);
 
@@ -144,6 +144,7 @@ void Hess_Reduction2(double *A,int n) {
     double* x = (double*) calloc(n,sizeof(double*));
     double* v = (double*) calloc(n,sizeof(double*));
     double *w = (double*) calloc(n,sizeof(double*));
+
     //Norme des vecteurs intermédiaires
     double norm_v =0.0;
     double norm_x=0.0;

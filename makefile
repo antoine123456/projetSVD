@@ -3,12 +3,21 @@
 # `make progname ; ./progname` to build and run progname.c executable
 # `make clean` clean all executables generated
 
+#<<<<<<< HEAD
 CC=gcc
 CFLAGS=-g -Wall -pg
+#=======
+CC=mpicc
+CFLAGS=-g -Wall
+#<<<<<<< hessenberg
+#>>>>>>> 955ad80338072ed5a9ea7239045d2fefd8c43dc7
 #<<<<<<< HEAD
 #=======
 LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas -llapack
 #>>>>>>> c5cd3dee654365fc3705eb0b3d1376c6bc8f0193
+#=======
+#LDFLAGS=-lm -llapacke -fopenmp  -lcmocka -lcblas
+#>>>>>>> main
 
 SRCS=$(wildcard src/*.c)
 OBJS=$(patsubst src/%.c,obj/%.o,$(SRCS))

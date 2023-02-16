@@ -28,3 +28,12 @@ eigen_t QR_method_Tridiag(double *A, int n);
  * A is modified such that its diagonal
  * elements are its eigenvalues */
 void QR_shifted_method(double *A, int n);
+
+
+void qr_decomposition(double *A, int n, double *Q, double *R);
+
+/* QR iteration method */
+QR_t my_QR_method1(double *A, int n);
+
+/* QR iteration method */
+eigen_t my_QR_method2(double *A, int n);
