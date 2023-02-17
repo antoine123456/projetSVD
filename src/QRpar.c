@@ -1,7 +1,7 @@
 #include <QRpar.h>
 #include <assert.h>
 
-#include <openmpi-x86_64/mpi.h>
+#include <mpi.h>
 
 double RandDouble(double range_min, double range_max) {
     double r = ((double)rand() / (double) RAND_MAX) * (range_max-range_min) + range_min;
